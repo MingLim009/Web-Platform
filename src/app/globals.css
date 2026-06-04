@@ -1342,6 +1342,77 @@ html[data-color-mode="dark"] .float-card .label {
   font-size: 0.6875rem;
 }
 
+/* Pill-style single-click filter buttons (category/city) */
+button.filter-pill {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.55rem 0.7rem;
+  margin: 2px 0;
+  font-size: 0.875rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  font-family: inherit;
+}
+
+button.filter-pill:hover {
+  background: rgba(0, 119, 255, 0.08);
+  border-color: rgba(0, 119, 255, 0.18);
+}
+
+button.filter-pill .filter-radio {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(140, 148, 165, 0.65);
+  flex-shrink: 0;
+  display: inline-block;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+button.filter-pill .filter-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+button.filter-pill.is-active {
+  background: rgba(255, 106, 0, 0.12);
+  border-color: rgba(255, 106, 0, 0.4);
+  color: var(--c-orange, #ff6a00);
+  font-weight: 600;
+}
+
+button.filter-pill.is-active .filter-radio {
+  border-color: var(--c-orange, #ff6a00);
+  background: var(--c-orange, #ff6a00);
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+button.filter-pill .badge-mini {
+  margin-left: auto;
+}
+
+html[data-color-mode="dark"] button.filter-pill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-color-mode="dark"] button.filter-pill.is-active {
+  background: rgba(255, 106, 0, 0.18);
+  border-color: rgba(255, 106, 0, 0.5);
+  color: #ffb56b;
+}
+
 .results-main .results-toolbar {
   display: flex;
   justify-content: space-between;

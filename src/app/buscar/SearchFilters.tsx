@@ -56,6 +56,9 @@ export function SearchFilters({
     setOpen(false);
   }
 
+  const totalCategoryPros = categories.reduce((sum, c) => sum + c._count.professionals, 0);
+  const totalCityPros = cities.reduce((sum, c) => sum + c._count.professionals, 0);
+
   const activeCount =
     (params.categoria ? 1 : 0) +
     (params.cidade ? 1 : 0) +
@@ -101,30 +104,68 @@ export function SearchFilters({
 
         <div className="filter-group">
           <h4>{t("buscar.category")}</h4>
-          {categories.map((c) => (
-            <label key={c.id} className="filter-option">
-              <input
-                type="checkbox"
-                checked={params.categoria === c.slug}
-                onChange={() => toggleParam("categoria", c.slug)}
-              />
-              {cat(c.slug, c.name)} <span className="badge-mini">{c._count.professionals}</span>
-            </label>
-          ))}
+          <button
+            type="button"
+            className={`filter-option filter-pill${!params.categoria ? " is-active" : ""}`}
+            onClick={() => pushParams((p) => p.delete("categoria"))}
+          >
+            <span className="filter-radio" aria-hidden />
+            <span className="filter-label">{t("buscar.allCategories")}</span>
+            <span className="badge-mini">{totalCategoryPros}</span>
+          </button>
+          {categories.map((c) => {
+            const active = params.categoria === c.slug;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                className={`filter-option filter-pill${active ? " is-active" : ""}`}
+                onClick={() =>
+                  pushParams((p) => {
+                    if (active) p.delete("categoria");
+                    else p.set("categoria", c.slug);
+                  })
+                }
+              >
+                <span className="filter-radio" aria-hidden />
+                <span className="filter-label">{cat(c.slug, c.name)}</span>
+                <span className="badge-mini">{c._count.professionals}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="filter-group">
           <h4>{t("buscar.city")}</h4>
-          {cities.map((c) => (
-            <label key={c.id} className="filter-option">
-              <input
-                type="checkbox"
-                checked={params.cidade === c.slug}
-                onChange={() => toggleParam("cidade", c.slug)}
-              />
-              {c.name} <span className="badge-mini">{c._count.professionals}</span>
-            </label>
-          ))}
+          <button
+            type="button"
+            className={`filter-option filter-pill${!params.cidade ? " is-active" : ""}`}
+            onClick={() => pushParams((p) => p.delete("cidade"))}
+          >
+            <span className="filter-radio" aria-hidden />
+            <span className="filter-label">{t("buscar.allCitiesFilter")}</span>
+            <span className="badge-mini">{totalCityPros}</span>
+          </button>
+          {cities.map((c) => {
+            const active = params.cidade === c.slug;
+            return (
+              <button
+                key={c.id}
+                type="button"
+                className={`filter-option filter-pill${active ? " is-active" : ""}`}
+                onClick={() =>
+                  pushParams((p) => {
+                    if (active) p.delete("cidade");
+                    else p.set("cidade", c.slug);
+                  })
+                }
+              >
+                <span className="filter-radio" aria-hidden />
+                <span className="filter-label">{c.name}</span>
+                <span className="badge-mini">{c._count.professionals}</span>
+              </button>
+            );
+          })}
         </div>
 
         <div className="filter-group">
