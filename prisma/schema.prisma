@@ -1,0 +1,132 @@
+// AchouPro — Banco de dados
+// Fase 1 (MVP): SQLite para desenvolvimento
+// Fase 2 (produção Hostinger): trocar provider para postgresql/mysql
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// =================== USUÁRIOS ===================
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String?
+  googleId     String?  @unique
+  name         String
+  image        String?
+  phone        String?
+  role         String   @default("client") // admin | client | professional
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// =================== CATEGORIAS ===================
+model Category {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  name          String
+  icon          String? // nome do ícone SVG (chave do componente)
+  color         String? // cor de destaque (hex)
+  description   String?
+  order         Int            @default(0)
+  isActive      Boolean        @default(true)
+  professionals Professional[]
+  createdAt     DateTime       @default(now())
+}
+
+// =================== CIDADES ===================
+model City {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  name          String
+  state         String         @default("SE") // sigla do estado
+  isActive      Boolean        @default(true)
+  professionals Professional[]
+  createdAt     DateTime       @default(now())
+}
+
+// =================== PROFISSIONAIS ===================
+model Professional {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  title           String? // ex: "Eletricista Residencial"
+  bio             String?
+  // Localização
+  cityId          String
+  city            City     @relation(fields: [cityId], references: [id])
+  neighborhood    String?
+  state           String   @default("SE")
+  // Categoria
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id])
+  // Contato
+  phone           String?
+  whatsapp        String // formato E.164 sem +, ex: 5579999515563
+  email           String?
+  // Profissionais info
+  yearsExperience Int      @default(0)
+  photoUrl        String?
+  galleryUrls     String? // JSON array de URLs
+  specialties     String? // JSON array de strings
+  workingHours    String? // JSON: {monday: "08:00-18:00", ...}
+  // Selos
+  isFounder       Boolean  @default(false)
+  isVerified      Boolean  @default(false)
+  is24h           Boolean  @default(false)
+  isDomiciliar    Boolean  @default(false)
+  // Status
+  isActive        Boolean  @default(true)
+  isPending       Boolean  @default(false)
+  // Ratings (denormalizado p/ performance)
+  rating          Float    @default(0)
+  reviewCount     Int      @default(0)
+  // Relacionamento
+  reviews         Review[]
+  // Metadados
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([cityId])
+  @@index([isActive])
+}
+
+// =================== AVALIAÇÕES (1 nota geral, 1-5) ===================
+model Review {
+  id             String       @id @default(cuid())
+  professionalId String
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  reviewerName   String
+  reviewerEmail  String?
+  reviewerPhone  String?
+  rating         Int // 1 a 5 (nota geral, conforme decidido pelo cliente)
+  comment        String
+  proResponse    String? // resposta do profissional
+  isApproved     Boolean      @default(false)
+  isPublic       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([professionalId])
+  @@index([isApproved])
+}
+
+// =================== CONTATOS RECEBIDOS (futuro) ===================
+model ContactRequest {
+  id         String   @id @default(cuid())
+  name       String
+  email      String?
+  phone      String
+  subject    String?
+  message    String
+  source     String? // "homepage" | "perfil" | etc
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}

@@ -1,0 +1,938 @@
+/* =========================================================
+   ACHOUPRO — FORMATO PEACHWEB (referência peachweb.io)
+   Ativo quando html[data-site-theme="peachweb"]
+   ========================================================= */
+
+html[data-site-theme="peachweb"] {
+  --pw-bg: #fffbf7;
+  --pw-bg-soft: #fff4ec;
+  --pw-cream: #ffedbc;
+  --pw-peach: #ffc9a8;
+  --pw-coral: #ed4264;
+  --pw-coral-dark: #d63658;
+  --pw-ink: #141414;
+  --pw-ink-soft: #4a4a4a;
+  --pw-ink-muted: #6b6b6b;
+  --pw-border: rgba(20, 20, 20, 0.08);
+  --pw-card: #ffffff;
+  --pw-radius: 20px;
+  --pw-radius-pill: 999px;
+  --pw-shadow: 0 8px 32px rgba(237, 66, 100, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --pw-shadow-lg: 0 24px 64px rgba(237, 66, 100, 0.12), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --format-bar-h: 40px;
+}
+
+/* ---------- Barra de troca de formato ---------- */
+.format-switcher {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 300;
+  height: var(--format-bar-h, 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  font-size: 0.72rem;
+  border-bottom: 1px solid var(--pw-border, rgba(255, 255, 255, 0.1));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html[data-site-theme="achoupro"] .format-switcher {
+  background: rgba(5, 11, 31, 0.92);
+  color: rgba(255, 255, 255, 0.75);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-site-theme="peachweb"] .format-switcher {
+  background: rgba(255, 251, 247, 0.95);
+  color: var(--pw-ink-muted);
+  border-bottom-color: var(--pw-border);
+}
+
+.format-switcher-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+}
+
+.format-switcher-options {
+  display: flex;
+  gap: 0.35rem;
+  padding: 3px;
+  border-radius: var(--pw-radius-pill, 999px);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+html[data-site-theme="achoupro"] .format-switcher-options {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.format-switcher-btn {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+html[data-site-theme="achoupro"] .format-switcher-btn {
+  color: rgba(255, 255, 255, 0.65);
+  background: transparent;
+}
+
+html[data-site-theme="achoupro"] .format-switcher-btn.active {
+  background: rgba(255, 106, 0, 0.25);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(255, 106, 0, 0.4);
+}
+
+html[data-site-theme="peachweb"] .format-switcher-btn {
+  color: var(--pw-ink-muted);
+  background: transparent;
+}
+
+html[data-site-theme="peachweb"] .format-switcher-btn.active {
+  background: var(--pw-card);
+  color: var(--pw-ink);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+body.has-format-bar {
+  padding-top: var(--format-bar-h, 40px);
+}
+
+body.has-format-bar .navbar {
+  top: var(--format-bar-h, 40px);
+}
+
+/* ---------- Fundo PeachWeb ---------- */
+.peach-bg-scene {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #fffbf7 0%, #fff4ec 45%, #ffedbc 100%);
+}
+
+.peach-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: peachBlob 18s ease-in-out infinite alternate;
+}
+
+.peach-bg-blob-1 {
+  width: 55vw;
+  height: 55vw;
+  top: -15%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(237, 66, 100, 0.35), transparent 70%);
+}
+
+.peach-bg-blob-2 {
+  width: 45vw;
+  height: 45vw;
+  bottom: 10%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(255, 201, 168, 0.7), transparent 70%);
+  animation-delay: -6s;
+}
+
+.peach-bg-blob-3 {
+  width: 35vw;
+  height: 35vw;
+  top: 40%;
+  left: 35%;
+  background: radial-gradient(circle, rgba(255, 237, 188, 0.8), transparent 70%);
+  animation-delay: -12s;
+}
+
+.peach-bg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes peachBlob {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(3%, -2%) scale(1.08); }
+}
+
+html[data-site-theme="peachweb"] .bg-scene {
+  display: none !important;
+}
+
+/* ---------- Base ---------- */
+html[data-site-theme="peachweb"] {
+  background: var(--pw-bg);
+  scroll-behavior: smooth;
+}
+
+html[data-site-theme="peachweb"] body {
+  background: var(--pw-bg) !important;
+  color: var(--pw-ink-soft) !important;
+  font-family: var(--font-inter, "Inter"), "Segoe UI", system-ui, sans-serif !important;
+}
+
+html[data-site-theme="peachweb"] h1,
+html[data-site-theme="peachweb"] h2,
+html[data-site-theme="peachweb"] h3,
+html[data-site-theme="peachweb"] h4 {
+  color: var(--pw-ink) !important;
+  letter-spacing: -0.03em;
+}
+
+html[data-site-theme="peachweb"] p {
+  color: var(--pw-ink-soft) !important;
+}
+
+html[data-site-theme="peachweb"] ::selection {
+  background: rgba(237, 66, 100, 0.25);
+  color: var(--pw-ink);
+}
+
+/* ---------- Navbar estilo SaaS PeachWeb ---------- */
+html[data-site-theme="peachweb"] .navbar {
+  background: rgba(255, 251, 247, 0.82) !important;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--pw-border) !important;
+  box-shadow: none;
+}
+
+html[data-site-theme="peachweb"] .navbar .brand-name {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .navbar .brand-name .achou {
+  color: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .navbar .brand-name .pro {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .navbar .brand-tag {
+  color: var(--pw-ink-muted) !important;
+}
+
+html[data-site-theme="peachweb"] .nav-links a {
+  color: var(--pw-ink-soft) !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+html[data-site-theme="peachweb"] .nav-links a:hover,
+html[data-site-theme="peachweb"] .nav-links a.active {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .nav-links a.active::after {
+  background: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .nav-toggle {
+  background: var(--pw-card);
+  color: var(--pw-ink);
+  border: 1px solid var(--pw-border);
+}
+
+html[data-site-theme="peachweb"] .nav-links {
+  background: var(--pw-card) !important;
+}
+
+html[data-site-theme="peachweb"] .nav-founder-pill {
+  background: rgba(237, 66, 100, 0.1) !important;
+  color: var(--pw-coral) !important;
+  border-color: rgba(237, 66, 100, 0.25) !important;
+}
+
+/* Botões PeachWeb: primário preto pill */
+html[data-site-theme="peachweb"] .btn-primary {
+  background: var(--pw-ink) !important;
+  color: #fff !important;
+  border-radius: var(--pw-radius-pill) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15) !important;
+  font-weight: 600;
+  border: none;
+}
+
+html[data-site-theme="peachweb"] .btn-primary:hover {
+  background: #2a2a2a !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18) !important;
+}
+
+html[data-site-theme="peachweb"] .btn-outline {
+  background: var(--pw-card) !important;
+  color: var(--pw-ink) !important;
+  border: 1px solid var(--pw-border) !important;
+  border-radius: var(--pw-radius-pill) !important;
+  backdrop-filter: none;
+}
+
+html[data-site-theme="peachweb"] .btn-outline:hover {
+  border-color: var(--pw-ink) !important;
+  color: var(--pw-ink) !important;
+  background: var(--pw-card) !important;
+}
+
+html[data-site-theme="peachweb"] .btn-secondary,
+html[data-site-theme="peachweb"] .btn-success {
+  border-radius: var(--pw-radius-pill) !important;
+}
+
+html[data-site-theme="peachweb"] .btn-success {
+  background: #1a1a1a !important;
+}
+
+/* ---------- Hero ---------- */
+html[data-site-theme="peachweb"] .hero {
+  background: transparent !important;
+  padding: 4rem 0 5rem !important;
+}
+
+html[data-site-theme="peachweb"] .hero::before {
+  display: none !important;
+}
+
+html[data-site-theme="peachweb"] .hero-text h1 {
+  font-size: clamp(2.25rem, 5vw, 3.75rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.05 !important;
+  color: var(--pw-ink) !important;
+  text-shadow: none !important;
+}
+
+html[data-site-theme="peachweb"] .hero-text h1 .accent {
+  background: linear-gradient(135deg, var(--pw-coral), #ff8a6b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+html[data-site-theme="peachweb"] .hero-text h1 .blue {
+  background: linear-gradient(135deg, #141414, #4a4a4a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-site-theme="peachweb"] .hero-text > p {
+  font-size: 1.125rem !important;
+  color: var(--pw-ink-muted) !important;
+  max-width: 520px;
+}
+
+html[data-site-theme="peachweb"] .search-box {
+  background: var(--pw-card) !important;
+  border: 1px solid var(--pw-border) !important;
+  border-radius: var(--pw-radius-pill) !important;
+  box-shadow: var(--pw-shadow) !important;
+  backdrop-filter: none;
+  padding: 0.5rem 0.5rem 0.5rem 0.25rem;
+}
+
+html[data-site-theme="peachweb"] .search-box .field {
+  background: transparent !important;
+}
+
+html[data-site-theme="peachweb"] .search-box input,
+html[data-site-theme="peachweb"] .search-box select {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .search-box select option {
+  background: #fff;
+  color: var(--pw-ink);
+}
+
+html[data-site-theme="peachweb"] .search-box button {
+  border-radius: var(--pw-radius-pill) !important;
+  background: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .popular-tags a {
+  background: var(--pw-card);
+  border: 1px solid var(--pw-border);
+  color: var(--pw-ink-soft);
+  border-radius: var(--pw-radius-pill);
+}
+
+html[data-site-theme="peachweb"] .popular-tags a:hover {
+  background: var(--pw-coral);
+  border-color: var(--pw-coral);
+  color: #fff;
+}
+
+/* Hero visual Peach */
+html[data-site-theme="peachweb"] .hero-media-frame {
+  background: var(--pw-card);
+  border: 1px solid var(--pw-border);
+  border-radius: 28px;
+  padding: 12px;
+  box-shadow: var(--pw-shadow-lg);
+}
+
+html[data-site-theme="peachweb"] .hero-image-wrap {
+  margin: 0;
+  border-radius: 20px;
+  background: var(--pw-bg-soft);
+}
+
+html[data-site-theme="peachweb"] .hero-image {
+  border-radius: 20px;
+  border: none;
+  box-shadow: none;
+}
+
+html[data-site-theme="peachweb"] .float-card {
+  background: var(--pw-card) !important;
+  border: 1px solid var(--pw-border) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--pw-shadow) !important;
+  backdrop-filter: none;
+}
+
+html[data-site-theme="peachweb"] .float-card .label {
+  color: var(--pw-ink-muted) !important;
+}
+
+html[data-site-theme="peachweb"] .float-card .value {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .float-card .icon-verified {
+  background: rgba(40, 199, 111, 0.12) !important;
+  color: #1ea55a !important;
+}
+
+html[data-site-theme="peachweb"] .float-card .icon-rating {
+  background: rgba(237, 66, 100, 0.1) !important;
+  border-color: rgba(237, 66, 100, 0.2) !important;
+  box-shadow: none;
+}
+
+html[data-site-theme="peachweb"] .float-card .icon-users {
+  background: rgba(20, 20, 20, 0.06) !important;
+  color: var(--pw-ink) !important;
+}
+
+/* ---------- Seções & cards ---------- */
+html[data-site-theme="peachweb"] .section,
+html[data-site-theme="peachweb"] .categories,
+html[data-site-theme="peachweb"] .howto {
+  background: transparent !important;
+}
+
+html[data-site-theme="peachweb"] .section-header .eyebrow {
+  color: var(--pw-coral) !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+html[data-site-theme="peachweb"] .section-header h2 {
+  text-shadow: none !important;
+}
+
+html[data-site-theme="peachweb"] .section-header p {
+  color: var(--pw-ink-muted) !important;
+}
+
+html[data-site-theme="peachweb"] .cat-card,
+html[data-site-theme="peachweb"] .pro-card,
+html[data-site-theme="peachweb"] .howto-step,
+html[data-site-theme="peachweb"] .mission-card,
+html[data-site-theme="peachweb"] .value-card,
+html[data-site-theme="peachweb"] .stat-big,
+html[data-site-theme="peachweb"] .phase-card,
+html[data-site-theme="peachweb"] .filters,
+html[data-site-theme="peachweb"] .results-toolbar,
+html[data-site-theme="peachweb"] .review-card,
+html[data-site-theme="peachweb"] .empty-results,
+html[data-site-theme="peachweb"] .review-form,
+html[data-site-theme="peachweb"] .legal-toc {
+  background: var(--pw-card) !important;
+  border: 1px solid var(--pw-border) !important;
+  border-radius: var(--pw-radius) !important;
+  backdrop-filter: none !important;
+  box-shadow: var(--pw-shadow) !important;
+}
+
+html[data-site-theme="peachweb"] .cat-card:hover,
+html[data-site-theme="peachweb"] .pro-card:hover,
+html[data-site-theme="peachweb"] .howto-step:hover,
+html[data-site-theme="peachweb"] .mission-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--pw-shadow-lg) !important;
+  border-color: rgba(237, 66, 100, 0.2) !important;
+}
+
+html[data-site-theme="peachweb"] .cat-card .cat-icon {
+  background: linear-gradient(135deg, #fff4ec, #ffedbc) !important;
+  color: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .howto-step .step-num {
+  background: var(--pw-ink) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-site-theme="peachweb"] .howto-step:nth-child(2) .step-num,
+html[data-site-theme="peachweb"] .howto-step:nth-child(3) .step-num {
+  background: var(--pw-coral) !important;
+}
+
+/* Trust strip */
+html[data-site-theme="peachweb"] .trust-strip {
+  background: var(--pw-card) !important;
+  border: 1px solid var(--pw-border);
+  border-left: 0;
+  border-right: 0;
+  color: var(--pw-ink-soft);
+}
+
+html[data-site-theme="peachweb"] .trust-item {
+  color: var(--pw-ink-soft) !important;
+}
+
+html[data-site-theme="peachweb"] .trust-item svg {
+  color: var(--pw-coral) !important;
+}
+
+/* Founder banner — gradiente peach */
+html[data-site-theme="peachweb"] .founder-banner {
+  background: linear-gradient(135deg, #ed4264 0%, #ff8a6b 50%, #ffedbc 100%) !important;
+  border: none !important;
+  border-radius: 28px !important;
+  box-shadow: var(--pw-shadow-lg) !important;
+}
+
+html[data-site-theme="peachweb"] .founder-banner h2,
+html[data-site-theme="peachweb"] .founder-banner p,
+html[data-site-theme="peachweb"] .founder-banner .perks li {
+  color: #fff !important;
+}
+
+html[data-site-theme="peachweb"] .founder-seal {
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.2));
+}
+
+/* Footer */
+html[data-site-theme="peachweb"] .footer {
+  background: var(--pw-ink) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  border-top: none !important;
+}
+
+html[data-site-theme="peachweb"] .footer h4 {
+  color: #fff !important;
+}
+
+html[data-site-theme="peachweb"] .footer ul a:hover {
+  color: var(--pw-peach) !important;
+}
+
+/* Buscar */
+html[data-site-theme="peachweb"] .search-header {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-bottom: 1px solid var(--pw-border) !important;
+}
+
+html[data-site-theme="peachweb"] .breadcrumbs a {
+  color: var(--pw-ink-muted);
+}
+
+html[data-site-theme="peachweb"] .breadcrumb-current {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .filter-group h4 {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .filter-option {
+  color: var(--pw-ink-soft) !important;
+}
+
+html[data-site-theme="peachweb"] .results-count {
+  color: var(--pw-ink-muted);
+}
+
+html[data-site-theme="peachweb"] .results-count strong {
+  color: var(--pw-ink);
+}
+
+/* Perfil */
+html[data-site-theme="peachweb"] .profile-hero {
+  background: linear-gradient(180deg, #fff4ec, transparent) !important;
+}
+
+html[data-site-theme="peachweb"] .profile-cat {
+  background: rgba(237, 66, 100, 0.1) !important;
+  color: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .profile-title,
+html[data-site-theme="peachweb"] .profile-meta .meta-item {
+  color: var(--pw-ink-muted) !important;
+}
+
+html[data-site-theme="peachweb"] .profile-section {
+  border-bottom-color: var(--pw-border) !important;
+}
+
+html[data-site-theme="peachweb"] .specialty-tag {
+  background: #fff4ec !important;
+  color: var(--pw-coral-dark) !important;
+  border: 1px solid rgba(237, 66, 100, 0.15);
+}
+
+html[data-site-theme="peachweb"] .contact-card {
+  background: var(--pw-ink) !important;
+  border-radius: var(--pw-radius) !important;
+}
+
+html[data-site-theme="peachweb"] .bar-track {
+  background: #f0ebe6 !important;
+}
+
+html[data-site-theme="peachweb"] .bar-fill {
+  background: linear-gradient(90deg, var(--pw-coral), #ff8a6b) !important;
+}
+
+/* Sobre */
+html[data-site-theme="peachweb"] .about-hero {
+  background: transparent !important;
+}
+
+html[data-site-theme="peachweb"] .section-tag {
+  background: rgba(237, 66, 100, 0.1) !important;
+  color: var(--pw-coral) !important;
+  border-color: rgba(237, 66, 100, 0.2) !important;
+}
+
+html[data-site-theme="peachweb"] .stat-big .stat-num {
+  color: var(--pw-coral) !important;
+}
+
+/* Legais */
+html[data-site-theme="peachweb"] .legal-page {
+  background: transparent !important;
+}
+
+html[data-site-theme="peachweb"] .legal-head h1 {
+  color: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] .legal-content a {
+  color: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .legal-link {
+  background: #fff4ec !important;
+  color: var(--pw-coral-dark) !important;
+}
+
+/* Cookie */
+html[data-site-theme="peachweb"] .cookie-banner {
+  background: var(--pw-ink) !important;
+}
+
+html[data-site-theme="peachweb"] input,
+html[data-site-theme="peachweb"] select,
+html[data-site-theme="peachweb"] textarea {
+  color-scheme: light;
+}
+
+/* Pro card detalhes */
+html[data-site-theme="peachweb"] .pro-card .pro-cat {
+  color: var(--pw-coral) !important;
+}
+
+html[data-site-theme="peachweb"] .phase-card.phase-current {
+  border-color: var(--pw-coral) !important;
+  background: linear-gradient(135deg, #fff, #fff4ec) !important;
+}
+
+@media (max-width: 640px) {
+  .format-switcher {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--format-bar-h, 40px);
+    padding: 0.4rem 0.5rem;
+  }
+
+  .format-switcher-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.65rem;
+  }
+
+  body.has-format-bar {
+    padding-top: 56px;
+  }
+
+  body.has-format-bar .navbar {
+    top: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peach-bg-blob {
+    animation: none;
+  }
+}
+
+/* ---------- Hero PeachWeb (completo) ---------- */
+html[data-site-theme="peachweb"] .hero-eyebrow {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--pw-coral);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.hero-eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pw-coral, #ed4264);
+  box-shadow: 0 0 12px rgba(237, 66, 100, 0.6);
+  animation: peachPulse 2s ease-in-out infinite;
+}
+
+@keyframes peachPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.7; }
+}
+
+html[data-site-theme="peachweb"] .hero-lead {
+  margin-bottom: 1.5rem;
+}
+
+html[data-site-theme="peachweb"] .hero-cta-row {
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+html[data-site-theme="peachweb"] .hero-scroll-cue {
+  display: inline-flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pw-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+html[data-site-theme="peachweb"] .hero-scroll-cue svg {
+  opacity: 0.7;
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+html[data-site-theme="peachweb"] .hero-media-peach-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(237, 66, 100, 0.15), transparent 65%);
+  pointer-events: none;
+}
+
+html[data-site-theme="peachweb"] .hero-visual--peach .hero-media-frame {
+  box-shadow:
+    0 0 0 1px rgba(237, 66, 100, 0.12),
+    0 32px 80px -16px rgba(237, 66, 100, 0.2),
+    var(--pw-shadow-lg);
+}
+
+/* ---------- Showcase Experience ---------- */
+.peach-showcase {
+  padding: 4rem 0;
+}
+
+.peach-showcase-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 2.5rem;
+}
+
+.peach-showcase-head h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.peach-showcase-head p {
+  color: var(--pw-ink-muted);
+}
+
+.peach-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.peach-showcase-card {
+  padding: 2rem;
+  background: var(--pw-card);
+  border: 1px solid var(--pw-border);
+  border-radius: var(--pw-radius);
+  box-shadow: var(--pw-shadow);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+.peach-showcase-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--pw-shadow-lg);
+}
+
+.peach-showcase-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--pw-coral);
+  margin-bottom: 0.75rem;
+}
+
+.peach-showcase-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.peach-showcase-card p {
+  font-size: 0.9375rem;
+  color: var(--pw-ink-muted);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.peach-showcase-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pw-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.peach-showcase-link:hover {
+  color: var(--pw-coral);
+}
+
+/* Howto passos Peach */
+.howto-peach-label {
+  display: none;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--pw-coral, #ed4264);
+  margin-bottom: 0.5rem;
+}
+
+html[data-site-theme="peachweb"] .howto-step {
+  position: relative;
+  text-align: left;
+}
+
+/* Footer CTA band */
+.footer-peach-cta {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  background: linear-gradient(135deg, rgba(237, 66, 100, 0.08), rgba(255, 237, 188, 0.4));
+  border: 1px solid var(--pw-border);
+  border-radius: 24px;
+}
+
+.footer-peach-cta h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: #fff;
+}
+
+html[data-site-theme="peachweb"] .footer-peach-cta h3,
+html[data-site-theme="peachweb"] .footer-peach-cta p {
+  color: var(--pw-ink);
+}
+
+.footer-peach-cta p {
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+.footer-peach-cta-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+html[data-site-theme="peachweb"] .founder-banner .btn:not(.btn-primary) {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  border-radius: var(--pw-radius-pill) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Stagger filhos reveal */
+html.theme-motion-on [data-reveal].is-visible .peach-showcase-card:nth-child(1) {
+  transition-delay: 0.05s;
+}
+html.theme-motion-on [data-reveal].is-visible .peach-showcase-card:nth-child(2) {
+  transition-delay: 0.12s;
+}
+html.theme-motion-on [data-reveal].is-visible .peach-showcase-card:nth-child(3) {
+  transition-delay: 0.19s;
+}
+
+html[data-site-theme="peachweb"] .howto-grid {
+  gap: 1.5rem;
+}
+
+html[data-site-theme="peachweb"] .cat-grid {
+  gap: 1.25rem;
+}
+
+html[data-site-theme="peachweb"] .page-main {
+  animation: none;
+}
+
+html[data-site-theme="peachweb"] .not-found-wrap {
+  text-align: center;
+  padding: 6rem 1rem;
+}

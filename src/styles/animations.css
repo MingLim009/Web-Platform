@@ -1,0 +1,180 @@
+/* =========================================================
+   ACHOUPRO — Animações de página + efeitos 3D
+   ========================================================= */
+
+/* ---------- Transição entre páginas ---------- */
+.page-transition {
+  min-height: 100%;
+  perspective: 1400px;
+}
+
+.page-transition.is-entering {
+  animation: pageEnter 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Entrada escalonada de seções (home e páginas públicas) */
+.section-pad,
+.hero-v2,
+.founder-banner,
+.about-hero,
+.legal-page {
+  animation: sectionReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-v2 { animation-delay: 0.05s; }
+.section-pad:nth-of-type(1) { animation-delay: 0.12s; }
+.section-pad:nth-of-type(2) { animation-delay: 0.18s; }
+.section-pad:nth-of-type(3) { animation-delay: 0.24s; }
+.founder-banner { animation-delay: 0.1s; }
+
+@keyframes sectionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respeita preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .page-transition.is-entering,
+  .section-pad,
+  .hero-v2,
+  .founder-banner,
+  .card-3d,
+  .card-3d:hover {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- Utilitário 3D ---------- */
+.perspective-wrap {
+  perspective: 1200px;
+  perspective-origin: center center;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  transition:
+    transform 0.42s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.42s ease;
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: translateY(-10px) rotateX(6deg) rotateY(-3deg) translateZ(12px);
+  box-shadow:
+    0 28px 50px -18px rgba(15, 23, 42, 0.28),
+    0 12px 24px -8px rgba(0, 119, 255, 0.12);
+}
+
+/* Botões com profundidade (efeito pressionar) */
+.btn-3d {
+  position: relative;
+  transform: translateZ(0);
+  box-shadow:
+    0 5px 0 color-mix(in srgb, var(--c-orange-dark) 85%, #000),
+    0 10px 22px -6px rgba(255, 106, 0, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-3d:hover {
+  transform: translateY(-3px) translateZ(8px);
+  box-shadow:
+    0 8px 0 color-mix(in srgb, var(--c-orange-dark) 85%, #000),
+    0 16px 28px -6px rgba(255, 106, 0, 0.55);
+}
+
+.btn-3d:active {
+  transform: translateY(3px) translateZ(0);
+  box-shadow:
+    0 2px 0 color-mix(in srgb, var(--c-orange-dark) 85%, #000),
+    0 4px 12px -4px rgba(255, 106, 0, 0.35);
+}
+
+/* Logo com leve profundidade */
+.brand-3d {
+  transition: transform 0.35s ease;
+  transform-style: preserve-3d;
+}
+
+.brand-3d:hover {
+  transform: scale(1.04) rotateY(-8deg) translateZ(6px);
+}
+
+/* Navbar com sombra flutuante 3D */
+.navbar-v2.is-scrolled {
+  box-shadow:
+    0 12px 40px -12px rgba(15, 23, 42, 0.18),
+    0 4px 12px -4px rgba(0, 119, 255, 0.08);
+}
+
+/* Perks do fundador — tilt individual */
+.perk.card-3d:hover {
+  transform: translateX(6px) translateY(-4px) rotateY(4deg) translateZ(8px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Ícones de categoria com pop 3D */
+.cat-icon-v2 {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-style: preserve-3d;
+}
+
+.cat-card-v2:hover .cat-icon-v2 {
+  transform: scale(1.12) translateZ(16px) rotateY(-12deg);
+}
+
+/* Hero photo com profundidade */
+.hv-main.card-3d:hover {
+  transform: translateY(-6px) rotateX(3deg) rotateY(2deg) translateZ(10px);
+}
+
+/* Stagger nos cards da grid */
+.pros-grid .pro-card,
+.cat-grid-v2 .cat-card-v2,
+.steps-v2 .step-v2 {
+  animation: cardPop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pros-grid .pro-card:nth-child(1),
+.cat-grid-v2 .cat-card-v2:nth-child(1),
+.steps-v2 .step-v2:nth-child(1) { animation-delay: 0.08s; }
+.pros-grid .pro-card:nth-child(2),
+.cat-grid-v2 .cat-card-v2:nth-child(2),
+.steps-v2 .step-v2:nth-child(2) { animation-delay: 0.14s; }
+.pros-grid .pro-card:nth-child(3),
+.cat-grid-v2 .cat-card-v2:nth-child(3),
+.steps-v2 .step-v2:nth-child(3) { animation-delay: 0.2s; }
+.pros-grid .pro-card:nth-child(4),
+.cat-grid-v2 .cat-card-v2:nth-child(4) { animation-delay: 0.26s; }
+
+@keyframes cardPop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

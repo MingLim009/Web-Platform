@@ -1,0 +1,148 @@
+# =================================================================
+# AchouPro — Configuração Nginx (proxy reverso para Next.js + SSL)
+#
+# CAMINHO no VPS:
+#   /etc/nginx/sites-available/achoupro
+#
+# COMO ATIVAR:
+#   sudo ln -s /etc/nginx/sites-available/achoupro /etc/nginx/sites-enabled/
+#   sudo nginx -t            # testar sintaxe
+#   sudo systemctl reload nginx
+#
+# SSL (Let's Encrypt):
+#   sudo apt install certbot python3-certbot-nginx
+#   sudo certbot --nginx -d achoupro.com.br -d www.achoupro.com.br
+#   (Certbot vai atualizar este arquivo automaticamente)
+# =================================================================
+
+# ---------- Cache de assets estáticos do Next.js ----------
+proxy_cache_path /var/cache/nginx/achoupro
+                 levels=1:2
+                 keys_zone=achoupro_cache:10m
+                 max_size=500m
+                 inactive=60m
+                 use_temp_path=off;
+
+# ---------- Limites globais ----------
+client_max_body_size 10M;
+
+# ---------- Compressão (gzip) ----------
+gzip on;
+gzip_vary on;
+gzip_min_length 1024;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_types
+  text/plain
+  text/css
+  text/xml
+  text/javascript
+  application/javascript
+  application/json
+  application/xml+rss
+  application/xml
+  image/svg+xml;
+
+# =================================================================
+# 1) HTTP -> HTTPS (Let's Encrypt redirecionará automaticamente)
+# =================================================================
+server {
+  listen 80;
+  listen [::]:80;
+  server_name achoupro.com.br www.achoupro.com.br;
+
+  # Permite o desafio do Let's Encrypt
+  location /.well-known/acme-challenge/ {
+    root /var/www/certbot;
+  }
+
+  # Redireciona todo o resto para HTTPS
+  location / {
+    return 301 https://$host$request_uri;
+  }
+}
+
+# =================================================================
+# 2) HTTPS (proxy reverso para Next.js na porta 3000)
+# =================================================================
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name achoupro.com.br www.achoupro.com.br;
+
+  # ---------- SSL (configurado pelo Certbot) ----------
+  # ssl_certificate     /etc/letsencrypt/live/achoupro.com.br/fullchain.pem;
+  # ssl_certificate_key /etc/letsencrypt/live/achoupro.com.br/privkey.pem;
+  # include             /etc/letsencrypt/options-ssl-nginx.conf;
+  # ssl_dhparam         /etc/letsencrypt/ssl-dhparams.pem;
+
+  # ---------- Headers de segurança ----------
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+  add_header X-Content-Type-Options "nosniff" always;
+  add_header X-Frame-Options "SAMEORIGIN" always;
+  add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+  add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+
+  # Logs específicos do site
+  access_log /var/log/nginx/achoupro_access.log;
+  error_log  /var/log/nginx/achoupro_error.log;
+
+  # ---------- Cache agressivo para assets do Next ----------
+  location /_next/static/ {
+    proxy_cache achoupro_cache;
+    proxy_pass http://127.0.0.1:3000;
+    expires 365d;
+    access_log off;
+    add_header Cache-Control "public, max-age=31536000, immutable";
+  }
+
+  # ---------- Cache para imagens otimizadas ----------
+  location /_next/image {
+    proxy_cache achoupro_cache;
+    proxy_cache_valid 200 7d;
+    proxy_pass http://127.0.0.1:3000;
+  }
+
+  # ---------- Cache para favicon e estáticos públicos ----------
+  location ~* \.(?:ico|css|js|gif|jpe?g|png|svg|webp|woff2?)$ {
+    proxy_pass http://127.0.0.1:3000;
+    expires 30d;
+    access_log off;
+    add_header Cache-Control "public, max-age=2592000";
+  }
+
+  # ---------- Proxy principal para o app Next.js ----------
+  location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_cache_bypass $http_upgrade;
+
+    proxy_connect_timeout 60s;
+    proxy_send_timeout 60s;
+    proxy_read_timeout 60s;
+  }
+
+  # ---------- Bloqueia acesso a arquivos sensíveis ----------
+  location ~ /\.(env|git|htaccess) {
+    deny all;
+    return 404;
+  }
+}
+
+# =================================================================
+# 3) Redireciona www -> sem www (opcional, ative se preferir)
+# =================================================================
+# server {
+#   listen 443 ssl http2;
+#   server_name www.achoupro.com.br;
+#   ssl_certificate     /etc/letsencrypt/live/achoupro.com.br/fullchain.pem;
+#   ssl_certificate_key /etc/letsencrypt/live/achoupro.com.br/privkey.pem;
+#   return 301 https://achoupro.com.br$request_uri;
+# }

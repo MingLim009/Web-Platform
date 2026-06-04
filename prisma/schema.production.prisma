@@ -1,0 +1,150 @@
+// AchouPro — Banco de dados PRODUÇÃO (PostgreSQL)
+//
+// COMO USAR EM PRODUÇÃO:
+// 1) Substitua o conteúdo de prisma/schema.prisma por este arquivo
+// 2) Configure DATABASE_URL no .env.production:
+//    postgresql://USER:PASS@HOST:5432/DBNAME?schema=public
+// 3) Rode: npx prisma migrate deploy
+// 4) Rode: npx prisma db seed (opcional, popula dados iniciais)
+//
+// As mudanças em relação ao SQLite (dev):
+// - provider mudou de "sqlite" para "postgresql"
+// - Campos JSON usam tipo Json nativo do Postgres (melhor performance + queries)
+// - Adicionados índices compostos para queries de busca filtrada
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =================== USUÁRIOS ===================
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("admin")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([email])
+}
+
+// =================== CATEGORIAS ===================
+model Category {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  name          String
+  icon          String?
+  color         String?
+  description   String?
+  order         Int            @default(0)
+  isActive      Boolean        @default(true)
+  professionals Professional[]
+  createdAt     DateTime       @default(now())
+
+  @@index([slug])
+  @@index([isActive, order])
+}
+
+// =================== CIDADES ===================
+model City {
+  id            String         @id @default(cuid())
+  slug          String         @unique
+  name          String
+  state         String         @default("SE")
+  isActive      Boolean        @default(true)
+  professionals Professional[]
+  createdAt     DateTime       @default(now())
+
+  @@index([slug])
+}
+
+// =================== PROFISSIONAIS ===================
+model Professional {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  title           String?
+  bio             String?  @db.Text
+
+  cityId          String
+  city            City     @relation(fields: [cityId], references: [id])
+  neighborhood    String?
+  state           String   @default("SE")
+
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id])
+
+  phone           String?
+  whatsapp        String
+  email           String?
+
+  yearsExperience Int      @default(0)
+  photoUrl        String?
+  galleryUrls     Json?    // array de URLs (JSON nativo)
+  specialties     Json?    // array de strings
+  workingHours    Json?    // { monday: "08:00-18:00", ... }
+
+  isFounder       Boolean  @default(false)
+  isVerified      Boolean  @default(false)
+  is24h           Boolean  @default(false)
+  isDomiciliar    Boolean  @default(false)
+
+  isActive        Boolean  @default(true)
+  isPending       Boolean  @default(false)
+
+  rating          Float    @default(0)
+  reviewCount     Int      @default(0)
+
+  reviews         Review[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([categoryId, isActive])
+  @@index([cityId, isActive])
+  @@index([isActive, isFounder, rating(sort: Desc)])
+  @@index([slug])
+  @@index([rating(sort: Desc)])
+}
+
+// =================== AVALIAÇÕES ===================
+model Review {
+  id             String       @id @default(cuid())
+  professionalId String
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  reviewerName   String
+  reviewerEmail  String?
+  reviewerPhone  String?
+  rating         Int
+  comment        String       @db.Text
+  proResponse    String?      @db.Text
+  isApproved     Boolean      @default(false)
+  isPublic       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([professionalId, isApproved])
+  @@index([isApproved, createdAt(sort: Desc)])
+}
+
+// =================== CONTATOS RECEBIDOS ===================
+model ContactRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String
+  subject   String?
+  message   String   @db.Text
+  source    String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead, createdAt(sort: Desc)])
+}

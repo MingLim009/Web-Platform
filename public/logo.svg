@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 130" width="100" height="130">
+  <defs>
+    <linearGradient id="pinTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8A2C"/>
+      <stop offset="100%" stop-color="#FF6A00"/>
+    </linearGradient>
+    <linearGradient id="pinBottom" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E88E5"/>
+      <stop offset="100%" stop-color="#0077FF"/>
+    </linearGradient>
+    <linearGradient id="checkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3FE08F"/>
+      <stop offset="100%" stop-color="#28C76F"/>
+    </linearGradient>
+  </defs>
+  <path d="M50 5 C25 5 8 22 8 47 C8 75 50 120 50 120 C50 120 92 75 92 47 C92 22 75 5 50 5 Z" fill="url(#pinBottom)"/>
+  <path d="M50 5 C25 5 8 22 8 47 C8 51 9 55 10 59 L90 59 C91 55 92 51 92 47 C92 22 75 5 50 5 Z" fill="url(#pinTop)"/>
+  <rect x="36" y="22" width="28" height="20" rx="3" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <rect x="44" y="18" width="12" height="6" rx="1.5" fill="none" stroke="#ffffff" stroke-width="3"/>
+  <path d="M28 50 L45 72 L78 38" fill="none" stroke="url(#checkGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 50 L45 72 L78 38" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
