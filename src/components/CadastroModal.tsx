@@ -126,7 +126,6 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
     }
   }
 
-  const googleConfigured = process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
   const isSignup = mode === "signup";
 
   return (
@@ -188,12 +187,6 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
                 </svg>
                 {loading ? t("cadastro.connecting") : t("cadastro.google")}
               </button>
-              {!googleConfigured && (
-                <p className="cadastro-hint">
-                  Configure <code>GOOGLE_CLIENT_ID</code> e <code>GOOGLE_CLIENT_SECRET</code> no{" "}
-                  <code>.env</code> para ativar o Google.
-                </p>
-              )}
             </>
           )}
 

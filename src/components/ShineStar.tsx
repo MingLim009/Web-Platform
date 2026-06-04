@@ -7,7 +7,20 @@ type ShineStarProps = {
   sublabel?: string;
 };
 
-/** Estrela grande com raios de brilho — sem fundo, visível em tema claro e escuro */
+/** Generate a proper symmetric 5-point star path. */
+function buildStarPath(cx: number, cy: number, outer: number, inner: number): string {
+  const points: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    const angle = (Math.PI / 5) * i - Math.PI / 2;
+    const r = i % 2 === 0 ? outer : inner;
+    const x = cx + Math.cos(angle) * r;
+    const y = cy + Math.sin(angle) * r;
+    points.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+  }
+  return `M${points.join(" L")} Z`;
+}
+
+/** Large luminous 5-point star with radiating beams — no background disc. */
 export function ShineStar({
   size = 120,
   className = "",
@@ -18,21 +31,24 @@ export function ShineStar({
 }: ShineStarProps) {
   const uid = `shine-${size}`;
   const cx = 60;
-  const cy = 58;
-  const scale = size / 120;
+  const cy = 60;
+  const starOuter = 30;
+  const starInner = 13;
+  const rayInner = 36;
+  const rayOuter = 58;
 
   const rayLines = Array.from({ length: rays }, (_, i) => {
     const angle = (i / rays) * Math.PI * 2 - Math.PI / 2;
-    const inner = 22 * scale;
-    const outer = 52 * scale;
     return {
-      x1: cx + Math.cos(angle) * inner,
-      y1: cy + Math.sin(angle) * inner,
-      x2: cx + Math.cos(angle) * outer,
-      y2: cy + Math.sin(angle) * outer,
+      x1: cx + Math.cos(angle) * rayInner,
+      y1: cy + Math.sin(angle) * rayInner,
+      x2: cx + Math.cos(angle) * rayOuter,
+      y2: cy + Math.sin(angle) * rayOuter,
       i,
     };
   });
+
+  const starPath = buildStarPath(cx, cy, starOuter, starInner);
 
   return (
     <div className={`shine-star-wrap ${className}`.trim()} style={{ width: size, maxWidth: "100%" }}>
@@ -71,7 +87,7 @@ export function ShineStar({
               x2={x2}
               y2={y2}
               stroke={`url(#${uid}-g)`}
-              strokeWidth={2.2 * scale}
+              strokeWidth={2.2}
               strokeLinecap="round"
               className="shine-star-ray"
               style={{ animationDelay: `${i * 0.09}s` }}
@@ -81,10 +97,11 @@ export function ShineStar({
 
         <path
           className="shine-star-body"
-          d={`M${cx} ${cy - 28 * scale}l${8 * scale} ${24 * scale}h${26 * scale}l-${21 * scale} ${16 * scale}l${8 * scale} ${24 * scale}l-${21 * scale}-${16 * scale}l-${21 * scale} ${16 * scale}z`}
+          d={starPath}
           fill={`url(#${uid}-g)`}
           stroke="#fff"
-          strokeWidth={0.8 * scale}
+          strokeWidth={0.8}
+          strokeLinejoin="round"
           filter={`url(#${uid}-glow)`}
         />
       </svg>

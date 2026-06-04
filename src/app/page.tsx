@@ -32,8 +32,8 @@ export default async function HomePage() {
           </div>
 
           <HeroVisual
-            imageSrc="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&auto=format&fit=crop&q=80"
-            imageAlt="Professional"
+            imageSrc="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&h=1000&auto=format&fit=crop&q=85"
+            imageAlt="Professional woman working at her computer"
             avgRating={stats.avgRating}
             totalPros={stats.totalPros}
           />
