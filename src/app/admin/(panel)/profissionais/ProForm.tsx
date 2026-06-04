@@ -19,12 +19,33 @@ function specialtiesToInput(value: unknown): string {
   return JSON.stringify(value);
 }
 
+type ProFormState = {
+  name: string;
+  slug: string;
+  title: string;
+  bio: string;
+  categoryId: string;
+  cityId: string;
+  neighborhood: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  yearsExperience: number;
+  photoUrl: string;
+  specialties: string;
+  isFounder: boolean;
+  isVerified: boolean;
+  is24h: boolean;
+  isDomiciliar: boolean;
+  isActive: boolean;
+};
+
 export function ProForm({ categories, cities, mode, initial }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ProFormState>({
     name: initial?.name || "",
     slug: initial?.slug || "",
     title: initial?.title || "",
@@ -45,7 +66,7 @@ export function ProForm({ categories, cities, mode, initial }: Props) {
     isActive: initial?.isActive ?? true,
   });
 
-  function setField<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
+  function setField<K extends keyof ProFormState>(key: K, value: ProFormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
