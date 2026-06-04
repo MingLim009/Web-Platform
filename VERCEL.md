@@ -1,6 +1,19 @@
 # Deploy no Vercel (AchouPro)
 
-## Variáveis de ambiente obrigatórias
+## Deploy automático (já configurado no repositório)
+
+O repositório inclui:
+
+- `vercel.json` — `DATABASE_URL`, NextAuth e variáveis públicas
+- `prisma/deploy.db` — banco SQLite com seed (categorias, profissionais, admin)
+
+Após `git push` na branch `main`, o Vercel reconstrói sozinho. Ajuste `NEXTAUTH_URL` e `NEXT_PUBLIC_SITE_URL` em `vercel.json` se o domínio Vercel for outro (ex.: `https://seu-projeto.vercel.app`).
+
+**Login admin (seed):** `contato@magnocorretor.com` / `MagnoAdmin@2026`
+
+> SQLite no Vercel serve para demo/leitura. Para produção com cadastros e admin persistentes, use PostgreSQL (seção abaixo).
+
+## Variáveis de ambiente (PostgreSQL em produção)
 
 No painel do projeto Vercel → **Settings → Environment Variables**, adicione:
 

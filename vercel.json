@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "DATABASE_URL": "file:./deploy.db",
+    "NEXTAUTH_SECRET": "KvGEc2yMAZXrcW5Thg0WbRXfwv6Uk//ulZSGObuVfLk=",
+    "NEXT_PUBLIC_SITE_NAME": "AchouPro",
+    "NEXT_PUBLIC_WHATSAPP": "5579999515563",
+    "NEXT_PUBLIC_INSTAGRAM": "https://www.instagram.com/achouprofissional",
+    "NEXT_PUBLIC_FACEBOOK": "https://www.facebook.com/share/1EMqc22Nzk/",
+    "NEXT_PUBLIC_CONTACT_EMAIL": "contato@achoupro.com"
+  }
+}

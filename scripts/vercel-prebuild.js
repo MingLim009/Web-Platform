@@ -8,6 +8,15 @@ const path = require("path");
 
 if (!process.env.VERCEL) return;
 
+const dbUrl = process.env.DATABASE_URL || "";
+const usePostgres =
+  dbUrl.startsWith("postgresql://") || dbUrl.startsWith("postgres://");
+
+if (!usePostgres) {
+  console.log("[vercel-prebuild] SQLite DATABASE_URL — keeping dev schema.");
+  return;
+}
+
 const root = path.join(__dirname, "..");
 const main = path.join(root, "prisma", "schema.prisma");
 const prod = path.join(root, "prisma", "schema.production.prisma");
