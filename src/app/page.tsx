@@ -8,7 +8,7 @@ import { HomePageSections } from "@/components/HomePageSections";
 import { PeachShowcase } from "@/components/PeachShowcase";
 import { getCategories, getCities, getFeaturedProfessionals, getStats } from "@/lib/queries";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const [categories, cities, featured, stats] = await Promise.all([

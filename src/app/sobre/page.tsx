@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Conheça a história, missão e valores do AchouPro — a plataforma que conecta clientes a profissionais qualificados em Aracaju.",
 };
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function SobrePage() {
   const stats = await getStats();

@@ -2,6 +2,7 @@
  * Server queries para Prisma (uso em Server Components)
  */
 
+import { EMPTY_STATS, hasDatabaseUrl } from "@/lib/db-env";
 import { prisma } from "@/lib/prisma";
 
 export type ProfessionalListFilters = {
@@ -20,6 +21,7 @@ export type ProfessionalListFilters = {
 };
 
 export async function getProfessionals(filters: ProfessionalListFilters = {}) {
+  if (!hasDatabaseUrl()) return [];
   const where: Record<string, unknown> = { isActive: true };
 
   if (filters.categorySlug) where.category = { slug: filters.categorySlug };
@@ -57,6 +59,7 @@ export async function getProfessionals(filters: ProfessionalListFilters = {}) {
 }
 
 export async function getProfessionalBySlug(slug: string) {
+  if (!hasDatabaseUrl()) return null;
   return prisma.professional.findUnique({
     where: { slug },
     include: {
@@ -72,6 +75,7 @@ export async function getProfessionalBySlug(slug: string) {
 }
 
 export async function getCategories() {
+  if (!hasDatabaseUrl()) return [];
   return prisma.category.findMany({
     where: { isActive: true },
     orderBy: { order: "asc" },
@@ -82,6 +86,7 @@ export async function getCategories() {
 }
 
 export async function getCities() {
+  if (!hasDatabaseUrl()) return [];
   return prisma.city.findMany({
     where: { isActive: true },
     orderBy: { name: "asc" },
@@ -92,6 +97,7 @@ export async function getCities() {
 }
 
 export async function getFeaturedProfessionals(limit = 4) {
+  if (!hasDatabaseUrl()) return [];
   return prisma.professional.findMany({
     where: { isActive: true, isFounder: true },
     include: { category: true, city: true },
@@ -101,6 +107,7 @@ export async function getFeaturedProfessionals(limit = 4) {
 }
 
 export async function getStats() {
+  if (!hasDatabaseUrl()) return { ...EMPTY_STATS };
   const [totalPros, totalReviews, foundersTaken, pending] = await Promise.all([
     prisma.professional.count({ where: { isActive: true } }),
     prisma.review.count({ where: { isApproved: true } }),
