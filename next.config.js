@@ -31,6 +31,9 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "8mb",
     },
+    outputFileTracingIncludes: {
+      "/**/*": ["./prisma/deploy.db"],
+    },
   },
 };
 
