@@ -6,7 +6,7 @@ import { BuscarSearchForm, BuscarFilters, BuscarSort } from "./BuscarClient";
 import { BuscarPageHeader, BuscarResultsToolbar, BuscarEmptyState } from "@/components/BuscarPageClient";
 import { getCategories, getCities, getProfessionals } from "@/lib/queries";
 
-export const revalidate = 30;
+export const dynamic = "force-dynamic";
 
 type SearchParams = {
   q?: string;

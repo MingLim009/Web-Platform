@@ -39,7 +39,8 @@ export function SearchFilters({
     const next = new URLSearchParams(sp.toString());
     mutate(next);
     const qs = next.toString();
-    router.push(qs ? `/buscar?${qs}` : "/buscar");
+    const target = qs ? `/buscar?${qs}` : "/buscar";
+    router.replace(target, { scroll: false });
     router.refresh();
   }
 
