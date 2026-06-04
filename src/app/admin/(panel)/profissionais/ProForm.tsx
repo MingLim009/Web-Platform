@@ -12,6 +12,13 @@ type Props = {
   initial?: Professional;
 };
 
+/** SQLite stores JSON as string; PostgreSQL uses Prisma Json — always edit as text. */
+function specialtiesToInput(value: unknown): string {
+  if (value == null || value === "") return "[]";
+  if (typeof value === "string") return value;
+  return JSON.stringify(value);
+}
+
 export function ProForm({ categories, cities, mode, initial }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -30,7 +37,7 @@ export function ProForm({ categories, cities, mode, initial }: Props) {
     email: initial?.email || "",
     yearsExperience: initial?.yearsExperience || 0,
     photoUrl: initial?.photoUrl || "",
-    specialties: initial?.specialties || "[]",
+    specialties: specialtiesToInput(initial?.specialties),
     isFounder: initial?.isFounder || false,
     isVerified: initial?.isVerified || false,
     is24h: initial?.is24h || false,
