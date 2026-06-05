@@ -4,6 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProfileBreadcrumbs } from "@/components/ProfilePageI18n";
 import { ProfilePageBody } from "@/components/ProfilePageBody";
+import { SponsoredSlot } from "@/components/SponsoredSlot";
 import { getProfessionalBySlug } from "@/lib/queries";
 import { safeJsonParse, waLink } from "@/lib/utils";
 
@@ -77,6 +78,8 @@ export default async function ProfilePage({ params }: { params: { slug: string }
         ratingDistribution={ratingDistribution}
         wa={wa}
       />
+
+      <SponsoredSlot variant="profile" />
 
       <Footer />
     </main>

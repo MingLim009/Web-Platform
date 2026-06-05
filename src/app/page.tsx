@@ -1,21 +1,32 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProCard } from "@/components/ProCard";
-import { HeroVisual } from "@/components/HeroVisual";
+import { HeroMosaic } from "@/components/HeroMosaic";
 import { HomeHeroHead } from "@/components/HomeHeroHead";
 import { HomeSearchBox } from "@/components/HomeSearchBox";
 import { HomePageSections } from "@/components/HomePageSections";
 import { PeachShowcase } from "@/components/PeachShowcase";
-import { getCategories, getCities, getFeaturedProfessionals, getStats } from "@/lib/queries";
+import { WeeklyTop } from "@/components/WeeklyTop";
+import { CitiesSection } from "@/components/CitiesSection";
+import { PremiumPlans } from "@/components/PremiumPlans";
+import { SponsoredSlot } from "@/components/SponsoredSlot";
+import {
+  getCategories,
+  getCities,
+  getFeaturedProfessionals,
+  getStats,
+  getTopRatedWeekly,
+} from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [categories, cities, featured, stats] = await Promise.all([
+  const [categories, cities, featured, stats, weeklyTop] = await Promise.all([
     getCategories(),
     getCities(),
     getFeaturedProfessionals(4),
     getStats(),
+    getTopRatedWeekly(3),
   ]);
 
   const founderPct = Math.round((stats.foundersTaken / 200) * 100);
@@ -31,16 +42,13 @@ export default async function HomePage() {
             <HomeSearchBox cities={cities.map((c) => ({ slug: c.slug, name: c.name, state: c.state }))} />
           </div>
 
-          <HeroVisual
-            imageSrc="/images/hero-professional.png"
-            imageAlt="Professional woman working at her computer"
-            avgRating={stats.avgRating}
-            totalPros={stats.totalPros}
-          />
+          <HeroMosaic avgRating={stats.avgRating} totalPros={stats.totalPros} />
         </div>
       </section>
 
       <PeachShowcase />
+
+      <WeeklyTop pros={weeklyTop} />
 
       <HomePageSections
         categories={categories.map((c) => ({
@@ -59,6 +67,12 @@ export default async function HomePage() {
           <ProCard key={pro.id} pro={pro} />
         ))}
       />
+
+      <SponsoredSlot variant="home" />
+
+      <CitiesSection cities={cities.map((c) => ({ slug: c.slug, name: c.name, state: c.state, count: c._count.professionals }))} />
+
+      <PremiumPlans />
 
       <Footer />
     </main>

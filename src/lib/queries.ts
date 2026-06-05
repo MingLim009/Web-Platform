@@ -106,6 +106,45 @@ export async function getFeaturedProfessionals(limit = 4) {
   });
 }
 
+/**
+ * Top-rated professionals for the home "Weekly Top" podium.
+ * Strategy: prefer pros with reviews in the last 7 days, fall back to
+ * overall best-rated when there aren't enough recent reviews yet.
+ */
+export async function getTopRatedWeekly(limit = 3) {
+  if (!hasDatabaseUrl()) return [];
+
+  const since = new Date();
+  since.setDate(since.getDate() - 7);
+
+  const recent = await prisma.review.groupBy({
+    by: ["professionalId"],
+    where: { isApproved: true, createdAt: { gte: since } },
+    _count: { _all: true },
+    _avg: { rating: true },
+    orderBy: [{ _avg: { rating: "desc" } }, { _count: { professionalId: "desc" } }],
+    take: limit,
+  });
+
+  if (recent.length >= limit) {
+    const ids = recent.map((r) => r.professionalId);
+    const pros = await prisma.professional.findMany({
+      where: { id: { in: ids }, isActive: true },
+      include: { category: true, city: true },
+    });
+    return ids
+      .map((id) => pros.find((p) => p.id === id))
+      .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  }
+
+  return prisma.professional.findMany({
+    where: { isActive: true, reviewCount: { gt: 0 } },
+    include: { category: true, city: true },
+    orderBy: [{ rating: "desc" }, { reviewCount: "desc" }],
+    take: limit,
+  });
+}
+
 export async function getStats() {
   if (!hasDatabaseUrl()) return { ...EMPTY_STATS };
   const [totalPros, totalReviews, foundersTaken, pending] = await Promise.all([

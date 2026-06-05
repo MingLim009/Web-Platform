@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ProCard } from "@/components/ProCard";
 import { BuscarSearchForm, BuscarFilters, BuscarSort } from "./BuscarClient";
 import { BuscarPageHeader, BuscarResultsToolbar, BuscarEmptyState } from "@/components/BuscarPageClient";
+import { SponsoredSlot } from "@/components/SponsoredSlot";
 import { getCategories, getCities, getProfessionals } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
@@ -90,8 +92,11 @@ export default async function BuscarPage({ searchParams }: { searchParams: Searc
             <BuscarEmptyState />
           ) : (
             <div className="results-grid">
-              {pros.map((pro) => (
-                <ProCard key={pro.id} pro={pro} />
+              {pros.map((pro, idx) => (
+                <Fragment key={pro.id}>
+                  <ProCard pro={pro} />
+                  {idx === 3 && pros.length > 4 && <SponsoredSlot variant="category" />}
+                </Fragment>
               ))}
             </div>
           )}
