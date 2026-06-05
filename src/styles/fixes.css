@@ -106,11 +106,13 @@ html[data-site-theme="peachweb"] .footer-heart {
   color: var(--pw-coral, #ed4264);
 }
 
-/* ---------- Theme toggle (floating FAB, top-right, always visible) ---------- */
+/* ---------- Theme toggle (floating FAB, bottom-right, always visible) ---------- */
+/* Bottom-right so it never overlaps the navbar's sign-in / register buttons on mobile */
 .color-mode-toggle {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  bottom: 20px;
+  right: 20px;
+  top: auto;
   z-index: 350;
   width: 46px;
   height: 46px;
@@ -977,9 +979,9 @@ textarea {
   }
 }
 
-/* Sticky theme toggle should never cover the navbar's mobile-menu close button */
+/* Smaller toggle on phones, still anchored bottom-right */
 @media (max-width: 768px) {
-  .color-mode-toggle { top: 12px; right: 12px; width: 42px; height: 42px; }
+  .color-mode-toggle { bottom: 16px; right: 16px; width: 42px; height: 42px; }
 }
 
 /* --- Small phones (<=480px) --- */
@@ -1055,6 +1057,39 @@ textarea {
     width: 100%;
     max-width: 100%;
   }
+}
+
+/* --- Buscar filter sidebar pending state (during transitions) --- */
+aside.filters.is-pending {
+  position: relative;
+}
+
+aside.filters.is-pending::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(90deg, var(--c-orange) 0%, var(--c-blue) 50%, var(--c-orange) 100%);
+  background-size: 200% 100%;
+  animation: filterProgress 1s linear infinite;
+  z-index: 5;
+  pointer-events: none;
+}
+
+@keyframes filterProgress {
+  0% { background-position: 200% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* Pills instantly look active when clicked (optimistic UI handles the data) */
+button.filter-pill {
+  -webkit-tap-highlight-color: transparent;
+}
+button.filter-pill:active {
+  transform: scale(0.98);
 }
 
 /* --- Admin panel: tables and lists always scroll --- */

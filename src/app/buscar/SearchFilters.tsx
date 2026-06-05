@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Category, City } from "@prisma/client";
 import { useI18n } from "@/components/I18nProvider";
@@ -21,14 +21,25 @@ export function SearchFilters({
   const sp = useSearchParams();
   const { t, cat } = useI18n();
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const params = useMemo(() => {
+  const realParams = useMemo(() => {
     const p: Record<string, string | undefined> = {};
     sp.forEach((value, key) => {
       p[key] = value;
     });
     return p;
   }, [sp]);
+
+  // Optimistic snapshot: flips the UI instantly when the user clicks a
+  // pill while the server re-renders in the background. Resets to the
+  // real URL state when the navigation lands.
+  const [optimistic, setOptimistic] = useState<Record<string, string | undefined> | null>(null);
+  const params = optimistic ?? realParams;
+
+  useEffect(() => {
+    setOptimistic(null);
+  }, [realParams]);
 
   useEffect(() => {
     document.body.classList.toggle("filters-open", open);
@@ -40,8 +51,16 @@ export function SearchFilters({
     mutate(next);
     const qs = next.toString();
     const target = qs ? `/buscar?${qs}` : "/buscar";
-    router.replace(target, { scroll: false });
-    router.refresh();
+
+    const nextSnapshot: Record<string, string | undefined> = {};
+    next.forEach((value, key) => {
+      nextSnapshot[key] = value;
+    });
+    setOptimistic(nextSnapshot);
+
+    startTransition(() => {
+      router.replace(target, { scroll: false });
+    });
   }
 
   function toggleParam(key: string, value: string) {
@@ -52,8 +71,10 @@ export function SearchFilters({
   }
 
   function clearFilters() {
-    router.push("/buscar");
-    router.refresh();
+    setOptimistic({});
+    startTransition(() => {
+      router.push("/buscar");
+    });
     setOpen(false);
   }
 
@@ -86,7 +107,7 @@ export function SearchFilters({
         )}
       </div>
 
-      <aside className={`filters${open ? " open" : ""}`}>
+      <aside className={`filters${open ? " open" : ""}${isPending ? " is-pending" : ""}`}>
         <button type="button" className="filter-close" aria-label={t("buscar.closeFilters")} onClick={() => setOpen(false)}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="18" y1="6" x2="6" y2="18" />

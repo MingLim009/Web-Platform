@@ -35,8 +35,8 @@ const TILES: { key: string; src: string; categoria: string }[] = [
     categoria: "pedreiro",
   },
   {
-    key: "mosaicPetGroom",
-    src: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400&h=500&auto=format&fit=crop&q=80",
+    key: "mosaicHouseCleaner",
+    src: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&h=500&auto=format&fit=crop&q=80",
     categoria: "diarista",
   },
 ];

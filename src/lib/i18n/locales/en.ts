@@ -66,7 +66,7 @@ export const en: Messages = {
     mosaicPersonal: "Personal trainer",
     mosaicPhysio: "Physiotherapist",
     mosaicMason: "Mason",
-    mosaicPetGroom: "Pet grooming",
+    mosaicHouseCleaner: "House cleaner",
     mosaicSubtitle: "A multi-sector platform",
   },
   trust: {

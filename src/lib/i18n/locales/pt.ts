@@ -64,7 +64,7 @@ export const pt = {
     mosaicPersonal: "Personal trainer",
     mosaicPhysio: "Fisioterapeuta",
     mosaicMason: "Pedreiro",
-    mosaicPetGroom: "Banho e tosa",
+    mosaicHouseCleaner: "Diarista",
     mosaicSubtitle: "Plataforma multissetorial",
   },
   trust: {
