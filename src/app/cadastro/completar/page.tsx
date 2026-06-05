@@ -11,6 +11,11 @@ export const metadata: Metadata = {
   title: "Completar cadastro",
 };
 
+// Must be dynamic — otherwise Next.js pre-renders at build time with no
+// session and bakes in the redirect to /cadastro, which would cause every
+// signed-in user to bounce back to the signup modal (the "shake" bug).
+export const dynamic = "force-dynamic";
+
 export default async function CompletarCadastroPage() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
