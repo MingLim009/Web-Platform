@@ -28,11 +28,26 @@ function buildReqFromCookies() {
 }
 
 export default async function CompletarCadastroPage() {
-  const token = await getToken({
-    req: buildReqFromCookies(),
-    secret: process.env.NEXTAUTH_SECRET,
+  // Try BOTH cookie names — production uses `__Secure-` prefix on HTTPS, dev
+  // uses the plain name. We attempt secure first, then fall back.
+  const reqLike = buildReqFromCookies();
+  const secret = process.env.NEXTAUTH_SECRET;
+
+  const tokenSecure = await getToken({
+    req: reqLike,
+    secret,
+    secureCookie: true,
   }).catch(() => null);
 
+  const tokenPlain = tokenSecure
+    ? null
+    : await getToken({
+        req: reqLike,
+        secret,
+        secureCookie: false,
+      }).catch(() => null);
+
+  const token = tokenSecure || tokenPlain;
   const email = (token?.email as string | undefined)?.toLowerCase();
 
   const user = email
