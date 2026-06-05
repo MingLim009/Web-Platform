@@ -63,7 +63,16 @@ export function ProCard({ pro }: { pro: ProCardData }) {
     <article className="pro-card">
       <div className="pro-photo">
         {pro.photoUrl ? (
-          <img src={pro.photoUrl} alt={pro.name} loading="lazy" />
+          <img
+            src={pro.photoUrl}
+            alt={pro.name}
+            loading="lazy"
+            onError={(e) => {
+              const img = e.currentTarget;
+              const fb = `https://ui-avatars.com/api/?name=${encodeURIComponent(pro.name)}&size=400&background=0077FF&color=fff&bold=true`;
+              if (img.src !== fb) img.src = fb;
+            }}
+          />
         ) : (
           <div style={{ background: "var(--c-gray-200)", width: "100%", height: "100%" }} />
         )}

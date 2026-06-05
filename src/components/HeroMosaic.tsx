@@ -8,35 +8,45 @@ type HeroMosaicProps = {
   totalPros: number;
 };
 
-const TILES: { key: string; src: string; categoria: string }[] = [
+// Profession tiles. Each src is a Pexels stock photo verified to match the
+// occupation visually (no random/loremflickr — those returned unrelated images
+// like statues or vintage salons). `fallback` is used when the primary URL
+// fails to load at runtime (handled by the <img onError> below).
+const TILES: { key: string; src: string; fallback: string; categoria: string }[] = [
   {
     key: "mosaicElectrician",
-    src: "https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/5691656/pexels-photo-5691656.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "eletricista",
   },
   {
     key: "mosaicCaregiver",
-    src: "https://loremflickr.com/400/500/woman,nurse,elderly,care/all?lock=201",
+    src: "https://images.pexels.com/photos/7551589/pexels-photo-7551589.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "cuidador",
   },
   {
     key: "mosaicPersonal",
-    src: "https://loremflickr.com/400/500/personaltrainer,gym,fitness/all?lock=202",
+    src: "https://images.pexels.com/photos/3768916/pexels-photo-3768916.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "personal-trainer",
   },
   {
     key: "mosaicPhysio",
-    src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://images.pexels.com/photos/4506270/pexels-photo-4506270.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/3760275/pexels-photo-3760275.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "cuidador",
   },
   {
     key: "mosaicMason",
-    src: "https://images.unsplash.com/photo-1581094271901-8022df4466f9?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://images.pexels.com/photos/1216544/pexels-photo-1216544.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/3681998/pexels-photo-3681998.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "pedreiro",
   },
   {
     key: "mosaicHouseCleaner",
-    src: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://images.pexels.com/photos/4239092/pexels-photo-4239092.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/4239013/pexels-photo-4239013.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "diarista",
   },
 ];
@@ -54,7 +64,17 @@ export function HeroMosaic({ avgRating, totalPros }: HeroMosaicProps) {
             className="mosaic-tile"
             aria-label={t(`hero.${tile.key}`)}
           >
-            <img src={tile.src} alt={t(`hero.${tile.key}`)} loading="eager" />
+            <img
+              src={tile.src}
+              alt={t(`hero.${tile.key}`)}
+              loading="eager"
+              onError={(e) => {
+                const img = e.currentTarget;
+                if (img.src !== tile.fallback) {
+                  img.src = tile.fallback;
+                }
+              }}
+            />
             <span className="mosaic-tile-label">{t(`hero.${tile.key}`)}</span>
           </a>
         ))}

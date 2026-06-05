@@ -45,7 +45,15 @@ export function ProfilePageBody({ pro, gallery, specialties, reviews, ratingDist
           <div className="profile-hero-grid">
             <div className="profile-photo-main">
               {pro.photoUrl ? (
-                <img src={pro.photoUrl} alt={pro.name} />
+                <img
+                  src={pro.photoUrl}
+                  alt={pro.name}
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    const fb = `https://ui-avatars.com/api/?name=${encodeURIComponent(pro.name)}&size=600&background=0077FF&color=fff&bold=true`;
+                    if (img.src !== fb) img.src = fb;
+                  }}
+                />
               ) : (
                 <div style={{ background: "var(--c-gray-200)", height: 300 }} />
               )}

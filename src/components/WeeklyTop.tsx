@@ -36,7 +36,16 @@ export function WeeklyTop({ pros }: { pros: ProWithRel[] }) {
                 <Link href={`/profissional/${pro.slug}`} className="podium-link">
                   <div className="podium-photo">
                     {pro.photoUrl ? (
-                      <img src={pro.photoUrl} alt={pro.name} loading="lazy" />
+                      <img
+                        src={pro.photoUrl}
+                        alt={pro.name}
+                        loading="lazy"
+                        onError={(e) => {
+                          const img = e.currentTarget;
+                          const fb = `https://ui-avatars.com/api/?name=${encodeURIComponent(pro.name)}&size=400&background=0077FF&color=fff&bold=true`;
+                          if (img.src !== fb) img.src = fb;
+                        }}
+                      />
                     ) : (
                       <div className="podium-placeholder">{pro.name.charAt(0)}</div>
                     )}

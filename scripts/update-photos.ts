@@ -1,36 +1,33 @@
 /**
- * One-shot script: update women professionals' photoUrl in BOTH databases
- * (dev.db and deploy.db) without re-running the full seed.
+ * One-shot script: update professionals' photoUrl with profession-matched
+ * Pexels stock photos (verified visually for each role).
  *
  * Usage:
- *   $env:DATABASE_URL="file:./dev.db"; npx tsx scripts/update-photos.ts
  *   $env:DATABASE_URL="file:./prisma/deploy.db"; npx tsx scripts/update-photos.ts
+ *   $env:DATABASE_URL="file:./dev.db";          npx tsx scripts/update-photos.ts
  */
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const PEX = (id: string) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop`;
+
 const UPDATES: Array<{ slug: string; photoUrl: string }> = [
-  {
-    slug: "ana-costa-diarista",
-    photoUrl: "https://loremflickr.com/600/800/woman,smile,brazilian,professional/all?lock=101",
-  },
-  {
-    slug: "mariana-oliveira-personal",
-    photoUrl: "https://loremflickr.com/600/800/woman,fitness,trainer,gym/all?lock=102",
-  },
-  {
-    slug: "patricia-lima-manicure",
-    photoUrl: "https://loremflickr.com/600/800/woman,manicure,nails,beauty/all?lock=103",
-  },
-  {
-    slug: "sandra-rocha-cuidadora",
-    photoUrl: "https://loremflickr.com/600/800/woman,nurse,care,brazilian/all?lock=104",
-  },
-  {
-    slug: "daniela-souza-tec-informatica",
-    photoUrl: "https://loremflickr.com/600/800/woman,laptop,technology,coding/all?lock=105",
-  },
+  // Electrician (man with tools, not businessman)
+  { slug: "carlos-silva-eletricista", photoUrl: PEX("8005397") },
+  // Mason / construction worker (not a guy in a sweater)
+  { slug: "joao-ferreira-pedreiro", photoUrl: PEX("1216544") },
+  // Diarista / house cleaner (cleaning woman, not a statue)
+  { slug: "ana-costa-diarista", photoUrl: PEX("4239092") },
+  // Personal trainer woman
+  { slug: "mariana-oliveira-personal", photoUrl: PEX("3768916") },
+  // Manicure scene (not a vintage salon)
+  { slug: "patricia-lima-manicure", photoUrl: PEX("3997389") },
+  // Caregiver with elderly
+  { slug: "sandra-rocha-cuidadora", photoUrl: PEX("7551589") },
+  // Tech / programmer woman
+  { slug: "daniela-souza-tec-informatica", photoUrl: PEX("1181519") },
 ];
 
 async function main() {
@@ -41,7 +38,7 @@ async function main() {
         where: { slug: u.slug },
         data: { photoUrl: u.photoUrl },
       });
-      console.log(`  ✓ ${r.name} -> ${u.photoUrl.substring(0, 60)}...`);
+      console.log(`  ✓ ${r.name} -> ${u.photoUrl.substring(0, 70)}...`);
     } catch (e) {
       console.warn(`  ✗ ${u.slug}: ${String(e).substring(0, 80)}`);
     }
