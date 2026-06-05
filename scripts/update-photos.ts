@@ -14,20 +14,26 @@ const PEX = (id: string) =>
   `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=600&h=800&fit=crop`;
 
 const UPDATES: Array<{ slug: string; photoUrl: string }> = [
-  // Electrician (man with tools, not businessman)
-  { slug: "carlos-silva-eletricista", photoUrl: PEX("8005397") },
-  // Mason / construction worker (not a guy in a sweater)
+  // Electrician examining residential fuse box (verified, replaces 404 8005397)
+  { slug: "carlos-silva-eletricista", photoUrl: PEX("32497160") },
+  // Industrial worker with grinder (verified, real construction scene)
   { slug: "joao-ferreira-pedreiro", photoUrl: PEX("1216544") },
-  // Diarista / house cleaner (cleaning woman, not a statue)
-  { slug: "ana-costa-diarista", photoUrl: PEX("4239092") },
-  // Personal trainer woman
-  { slug: "mariana-oliveira-personal", photoUrl: PEX("3768916") },
-  // Manicure scene (not a vintage salon)
-  { slug: "patricia-lima-manicure", photoUrl: PEX("3997389") },
-  // Caregiver with elderly
+  // Middle-aged cleaning woman with gloves + bottle (verified, replaces 404
+  // 4239092 which was loading as a random chandelier)
+  { slug: "ana-costa-diarista", photoUrl: PEX("3768914") },
+  // Woman with purple dumbbells, kaboompics studio (replaces 3768916 which
+  // showed an exposed woman on an elliptical — client asked for fully clothed)
+  { slug: "mariana-oliveira-personal", photoUrl: PEX("4498294") },
+  // Professional manicure with nail dryer (replaces 3997389 which showed
+  // anonymous black-gloved hands the client flagged)
+  { slug: "patricia-lima-manicure", photoUrl: PEX("4677850") },
+  // Caregiver in yellow cardigan with elderly man (verified)
   { slug: "sandra-rocha-cuidadora", photoUrl: PEX("7551589") },
-  // Tech / programmer woman
+  // Smiling businesswoman tech (verified, fully clothed business attire)
   { slug: "daniela-souza-tec-informatica", photoUrl: PEX("1181519") },
+  // AC technician inspecting outdoor HVAC unit (replaces a deleted Unsplash
+  // photo that had been reassigned to a pair of headphones)
+  { slug: "pedro-almeida-ar-condicionado", photoUrl: PEX("32497161") },
 ];
 
 async function main() {

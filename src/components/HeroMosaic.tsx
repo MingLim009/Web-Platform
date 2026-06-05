@@ -15,8 +15,8 @@ type HeroMosaicProps = {
 const TILES: { key: string; src: string; fallback: string; categoria: string }[] = [
   {
     key: "mosaicElectrician",
-    src: "https://images.pexels.com/photos/8005397/pexels-photo-8005397.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/5691656/pexels-photo-5691656.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    src: "https://images.pexels.com/photos/32497160/pexels-photo-32497160.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/17842832/pexels-photo-17842832.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "eletricista",
   },
   {
@@ -27,26 +27,26 @@ const TILES: { key: string; src: string; fallback: string; categoria: string }[]
   },
   {
     key: "mosaicPersonal",
-    src: "https://images.pexels.com/photos/3768916/pexels-photo-3768916.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/2294361/pexels-photo-2294361.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    src: "https://images.pexels.com/photos/4498294/pexels-photo-4498294.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/4498603/pexels-photo-4498603.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "personal-trainer",
   },
   {
     key: "mosaicPhysio",
-    src: "https://images.pexels.com/photos/4506270/pexels-photo-4506270.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/3760275/pexels-photo-3760275.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    src: "https://images.pexels.com/photos/20860594/pexels-photo-20860594.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/4506166/pexels-photo-4506166.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "cuidador",
   },
   {
     key: "mosaicMason",
     src: "https://images.pexels.com/photos/1216544/pexels-photo-1216544.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/3681998/pexels-photo-3681998.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/5821000/pexels-photo-5821000.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "pedreiro",
   },
   {
     key: "mosaicHouseCleaner",
-    src: "https://images.pexels.com/photos/4239092/pexels-photo-4239092.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/4239013/pexels-photo-4239013.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    src: "https://images.pexels.com/photos/3768914/pexels-photo-3768914.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/4108808/pexels-photo-4108808.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "diarista",
   },
 ];
