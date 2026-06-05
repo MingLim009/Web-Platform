@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { cookies } from "next/headers";
+import { getToken } from "next-auth/jwt";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CompletarCadastroForm } from "./CompletarCadastroForm";
@@ -11,19 +11,38 @@ export const metadata: Metadata = {
   title: "Completar cadastro",
 };
 
-// Must be dynamic — otherwise Next.js pre-renders at build time with no
-// session and bakes in the redirect to /cadastro, which would cause every
-// signed-in user to bounce back to the signup modal (the "shake" bug).
+// Dynamic — must read the session-token cookie at request time.
 export const dynamic = "force-dynamic";
 
+// Build a synthetic NextRequest-shaped object that `getToken` can read.
+// We do this instead of using `getServerSession(authOptions)` because the
+// latter has known issues reading cookies in Next.js 14 App Router with
+// next-auth v4. `getToken` reads the JWT cookie directly using the secret.
+function buildReqFromCookies() {
+  const jar = cookies();
+  const cookieHeader = jar
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ");
+  return {
+    headers: { cookie: cookieHeader },
+    cookies: Object.fromEntries(jar.getAll().map((c) => [c.name, c.value])),
+  } as unknown as Parameters<typeof getToken>[0]["req"];
+}
+
 export default async function CompletarCadastroPage() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
+  const token = await getToken({
+    req: buildReqFromCookies(),
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const email = token?.email as string | undefined;
+  if (!email) {
     redirect("/cadastro");
   }
 
   const user = await prisma.user.findUnique({
-    where: { email: session.user.email.toLowerCase() },
+    where: { email: email.toLowerCase() },
   });
 
   if (!user) redirect("/cadastro");
