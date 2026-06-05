@@ -35,15 +35,13 @@ export function CadastroProvider({ children }: { children: React.ReactNode }) {
 
   const closeCadastro = useCallback(() => setOpen(false), []);
 
+  // Close the modal whenever the user changes route — this is the only
+  // pathname-driven side-effect now. We REMOVED the auto-open-on-/cadastro
+  // effect because it combined with the CadastroPageClient effect and the
+  // modal's own session-redirect to create a shake loop. The /cadastro page
+  // now opens the modal exactly once via CadastroPageClient.
   useEffect(() => {
     setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    if (pathname === "/cadastro") {
-      setModalMode("signup");
-      setOpen(true);
-    }
   }, [pathname]);
 
   useEffect(() => {

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useI18n } from "./I18nProvider";
 
 type CadastroModalProps = {
@@ -42,8 +41,7 @@ function GoogleLogo() {
 
 export function CadastroModal({ open, onClose, initialMode = "signup" }: CadastroModalProps) {
   const { t } = useI18n();
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { status } = useSession();
   const [mode, setMode] = useState<"signup" | "login">(initialMode);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -74,12 +72,11 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
     };
   }, [open, onClose]);
 
-  useEffect(() => {
-    if (open && session?.user) {
-      onClose();
-      router.push("/cadastro/completar");
-    }
-  }, [open, session, onClose, router]);
+  // NOTE: We DELIBERATELY do NOT auto-redirect when an existing session is
+  // detected. The previous implementation created a shake loop:
+  //   /cadastro auto-opens modal -> modal sees session -> push /completar ->
+  //   /completar redirects to /cadastro -> repeat.
+  // Now the user explicitly clicks the form button to navigate.
 
   if (!open) return null;
 

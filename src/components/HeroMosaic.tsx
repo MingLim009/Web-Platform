@@ -16,12 +16,12 @@ const TILES: { key: string; src: string; categoria: string }[] = [
   },
   {
     key: "mosaicCaregiver",
-    src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&auto=format&fit=crop&q=85",
+    src: "https://loremflickr.com/400/500/woman,nurse,elderly,care/all?lock=201",
     categoria: "cuidador",
   },
   {
     key: "mosaicPersonal",
-    src: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://loremflickr.com/400/500/personaltrainer,gym,fitness/all?lock=202",
     categoria: "personal-trainer",
   },
   {

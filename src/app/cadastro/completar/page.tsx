@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { getToken } from "next-auth/jwt";
 import { Navbar } from "@/components/Navbar";
@@ -11,13 +11,10 @@ export const metadata: Metadata = {
   title: "Completar cadastro",
 };
 
-// Dynamic — must read the session-token cookie at request time.
+// Read JWT directly at request time — must be dynamic so we never serve a
+// pre-rendered (no-session) version that would bounce signed-in users back.
 export const dynamic = "force-dynamic";
 
-// Build a synthetic NextRequest-shaped object that `getToken` can read.
-// We do this instead of using `getServerSession(authOptions)` because the
-// latter has known issues reading cookies in Next.js 14 App Router with
-// next-auth v4. `getToken` reads the JWT cookie directly using the secret.
 function buildReqFromCookies() {
   const jar = cookies();
   const cookieHeader = jar
@@ -34,18 +31,39 @@ export default async function CompletarCadastroPage() {
   const token = await getToken({
     req: buildReqFromCookies(),
     secret: process.env.NEXTAUTH_SECRET,
-  });
+  }).catch(() => null);
 
-  const email = token?.email as string | undefined;
-  if (!email) {
-    redirect("/cadastro");
+  const email = (token?.email as string | undefined)?.toLowerCase();
+
+  const user = email
+    ? await prisma.user.findUnique({ where: { email } }).catch(() => null)
+    : null;
+
+  // No session → render a graceful fallback panel, NEVER redirect.
+  // A redirect would loop back to /cadastro which used to re-open the modal,
+  // causing the "shake" the user reported.
+  if (!user) {
+    return (
+      <main className="page-main">
+        <Navbar />
+        <section className="cadastro-complete-section">
+          <div className="container">
+            <div className="cadastro-complete-card cadastro-need-login">
+              <h1>Sessão expirada</h1>
+              <p>
+                Você precisa entrar para completar seu cadastro. Volte para a
+                tela de login para continuar.
+              </p>
+              <Link href="/cadastro" className="btn btn-primary">
+                Voltar e entrar
+              </Link>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
   }
-
-  const user = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
-  });
-
-  if (!user) redirect("/cadastro");
 
   return (
     <main className="page-main">
