@@ -16,7 +16,7 @@ const TILES: { key: string; src: string; categoria: string }[] = [
   },
   {
     key: "mosaicCaregiver",
-    src: "https://images.unsplash.com/photo-1581579438747-104c53e7a8f3?w=400&h=500&auto=format&fit=crop&q=80",
+    src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=500&auto=format&fit=crop&q=85",
     categoria: "cuidador",
   },
   {
