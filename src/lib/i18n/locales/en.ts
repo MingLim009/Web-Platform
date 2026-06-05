@@ -270,6 +270,12 @@ export const en: Messages = {
     legal: "By continuing, you agree to the Terms of Use and Privacy Policy.",
     connecting: "Connecting...",
     success: "Account created! Complete your profile.",
+    orWithEmail: "or continue with your email",
+    noAccount: "Don't have an account?",
+    showPassword: "Show password",
+    hidePassword: "Hide password",
+    forgotPassword: "Forgot password",
+    googleFast: "Faster — no password needed",
   },
   loading: {
     title: "Loading AchouPro",

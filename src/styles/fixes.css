@@ -421,14 +421,89 @@ html[data-color-mode="light"] .cadastro-modal {
 }
 
 .cadastro-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   text-align: center;
-  margin: 1.25rem 0;
+  margin: 1.25rem 0 1rem;
   font-size: 0.8rem;
-  opacity: 0.6;
+  opacity: 0.7;
+}
+
+.cadastro-divider::before,
+.cadastro-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+html[data-color-mode="light"] .cadastro-divider::before,
+html[data-color-mode="light"] .cadastro-divider::after {
+  background: rgba(20, 20, 20, 0.1);
 }
 
 .cadastro-divider span {
-  padding: 0 0.75rem;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+/* Friendly hint under the Google button — communicates that Gmail signup
+   is faster because no password is required. */
+.cadastro-google-hint {
+  font-size: 0.75rem;
+  text-align: center;
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+  opacity: 0.65;
+}
+
+/* Password input + eye-toggle button overlay.
+   The button sits absolutely positioned on the right edge so the eye icon
+   appears INSIDE the input. The input itself gets right-padding to keep
+   typed characters from sliding under the icon. */
+.cadastro-pw-wrap {
+  position: relative;
+}
+
+.cadastro-pw-wrap input {
+  width: 100%;
+  padding-right: 2.75rem;
+}
+
+.cadastro-eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.cadastro-eye-btn:hover,
+.cadastro-eye-btn:focus-visible {
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.06);
+  outline: none;
+}
+
+html[data-color-mode="light"] .cadastro-eye-btn {
+  color: #64748b;
+}
+
+html[data-color-mode="light"] .cadastro-eye-btn:hover,
+html[data-color-mode="light"] .cadastro-eye-btn:focus-visible {
+  color: #0f172a;
+  background: rgba(15, 23, 42, 0.05);
 }
 
 .cadastro-alt,

@@ -269,6 +269,12 @@ export const pt = {
     legal: "Ao continuar, você concorda com os Termos de Uso e a Política de Privacidade.",
     connecting: "Conectando...",
     success: "Conta criada! Complete seu perfil.",
+    orWithEmail: "ou continue com seu e-mail",
+    noAccount: "Não tem conta?",
+    showPassword: "Mostrar senha",
+    hidePassword: "Ocultar senha",
+    forgotPassword: "Esqueci minha senha",
+    googleFast: "Mais rápido — sem precisar criar senha",
   },
   loading: {
     title: "Carregando AchouPro",

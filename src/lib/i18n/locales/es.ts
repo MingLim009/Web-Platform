@@ -270,6 +270,12 @@ export const es: Messages = {
     legal: "Al continuar, acepta los Términos de Uso y la Política de Privacidad.",
     connecting: "Conectando...",
     success: "¡Cuenta creada! Complete su perfil.",
+    orWithEmail: "o continúe con su correo electrónico",
+    noAccount: "¿No tiene cuenta?",
+    showPassword: "Mostrar contraseña",
+    hidePassword: "Ocultar contraseña",
+    forgotPassword: "Olvidé mi contraseña",
+    googleFast: "Más rápido — sin crear contraseña",
   },
   loading: {
     title: "Cargando AchouPro",
