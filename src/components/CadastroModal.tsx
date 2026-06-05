@@ -100,6 +100,10 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
   async function handleEmailSignup(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (password.length < 8) {
+      setError("A senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
     if (password !== confirmPassword) {
       setError("As senhas não coincidem.");
       return;
@@ -111,7 +115,7 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setError(data.error || "Erro ao criar conta.");
         setLoading(false);
@@ -123,12 +127,14 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
         redirect: false,
       });
       if (sign?.error) {
-        setError("Conta criada, mas não foi possível entrar. Use Entrar com seu e-mail.");
+        setError("Conta criada, mas não foi possível entrar automaticamente. Use Entrar com seu e-mail.");
         setLoading(false);
         return;
       }
-      onClose();
-      router.push("/cadastro/completar");
+      // Force a full navigation so the freshly-set session-token cookie is
+      // included on the next server-side request to /cadastro/completar.
+      // router.push uses a soft navigation that can race the cookie setter.
+      window.location.assign("/cadastro/completar");
     } catch {
       setError("Erro de conexão. Tente novamente.");
       setLoading(false);
@@ -138,6 +144,10 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (password.length < 8) {
+      setError("A senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
     setLoading(true);
     try {
       const sign = await signIn("credentials", {
@@ -150,8 +160,8 @@ export function CadastroModal({ open, onClose, initialMode = "signup" }: Cadastr
         setLoading(false);
         return;
       }
-      onClose();
-      router.push("/cadastro/completar");
+      // Full reload — see note above on cookie/router race.
+      window.location.assign("/cadastro/completar");
     } catch {
       setError("Erro de conexão. Tente novamente.");
       setLoading(false);
