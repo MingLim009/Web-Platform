@@ -274,6 +274,15 @@ h1, h2, h3, h4, h5, h6 {
   width: 40px;
   height: 40px;
   flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(255, 106, 0, 0.35))
+          drop-shadow(0 2px 6px rgba(0, 119, 255, 0.25));
+  transition: transform 0.35s cubic-bezier(.2, .9, .3, 1.2), filter 0.35s ease;
+}
+
+.brand:hover .brand-mark {
+  transform: translateY(-2px) rotate(-4deg) scale(1.06);
+  filter: drop-shadow(0 8px 18px rgba(255, 138, 44, 0.55))
+          drop-shadow(0 4px 12px rgba(0, 119, 255, 0.4));
 }
 
 .brand-text {
@@ -285,10 +294,23 @@ h1, h2, h3, h4, h5, h6 {
 .brand-name {
   font-size: 1.25rem;
   letter-spacing: -0.02em;
+  font-weight: 800;
 }
 
-.brand-name .achou { color: var(--c-orange); }
-.brand-name .pro { color: var(--c-blue); }
+.brand-name .achou {
+  background: linear-gradient(135deg, #FFB266 0%, #FF8A2C 50%, #E65800 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.08));
+}
+.brand-name .pro {
+  background: linear-gradient(135deg, #4FA3F7 0%, #0F77E5 50%, #003D80 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.08));
+}
 
 .brand-tag {
   font-size: 0.6875rem;
@@ -3588,6 +3610,23 @@ table.admin-table {
   font-size: 3rem;
   margin-bottom: 1rem;
 }
+
+.mission-icon-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.75rem;
+  transition: transform 0.4s cubic-bezier(.2, .9, .3, 1.2), filter 0.4s ease;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.08));
+}
+.mission-card:hover .mission-icon-svg {
+  transform: translateY(-3px) scale(1.06);
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.16));
+}
+.mission-svg { display: block; }
+.mission-svg-mission { color: #FF8A2C; }
+.mission-svg-vision  { color: #F59E0B; }
+.mission-svg-values  { color: #0077FF; }
 .mission-card h3 {
   font-size: 1.25rem;
   font-weight: 700;

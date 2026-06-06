@@ -31,6 +31,12 @@ function IconUserPlus() {
 
 export function Navbar({ founderSlots }: { founderSlots?: number }) {
   const [open, setOpen] = useState(false);
+  // activeSection tracks which top-level nav item is "current":
+  //  - "home" when at / and no #categorias hash
+  //  - "categories" when at / with #categorias hash OR when the categorias
+  //    section is the most prominent one in the viewport
+  //  - "search" / "about" when on /buscar or /sobre
+  const [activeSection, setActiveSection] = useState<"home" | "categories" | "search" | "about" | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { isLight } = useSiteTheme();
@@ -55,24 +61,80 @@ export function Navbar({ founderSlots }: { founderSlots?: number }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const navLinks = [
-    { href: "/", label: t("nav.home") },
-    { href: "/buscar", label: t("nav.search") },
-    { href: "/#categorias", label: t("nav.categories"), hash: true },
-    { href: "/sobre", label: t("nav.about") },
-  ];
+  // Compute the active nav item. usePathname() does NOT include the hash,
+  // so we must read window.location.hash separately and watch hashchange +
+  // scroll (so the underline tracks where the user actually is on /).
+  // This fixes the bug where both "Home" and "Categories" lit up at the
+  // same time on the home page, and the underline appeared to "jump" when
+  // you clicked between them.
+  useEffect(() => {
+    if (pathname === "/buscar" || pathname.startsWith("/buscar")) {
+      setActiveSection("search");
+      return;
+    }
+    if (pathname === "/sobre" || pathname.startsWith("/sobre")) {
+      setActiveSection("about");
+      return;
+    }
+    if (pathname !== "/") {
+      setActiveSection(null);
+      return;
+    }
 
-  const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
-    if (href.includes("#")) return pathname === "/";
-    return pathname.startsWith(href);
-  };
+    const compute = () => {
+      if (window.location.hash === "#categorias") {
+        setActiveSection("categories");
+        return;
+      }
+      // Scroll-spy: if the #categorias section center is in the upper half
+      // of the viewport, mark "categories"; otherwise "home".
+      const section = document.getElementById("categorias");
+      if (section) {
+        const r = section.getBoundingClientRect();
+        const mid = r.top + r.height / 2;
+        if (mid > 0 && mid < window.innerHeight * 0.55) {
+          setActiveSection("categories");
+          return;
+        }
+      }
+      setActiveSection("home");
+    };
+
+    compute();
+    const onScroll = () => compute();
+    const onHash = () => compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("hashchange", onHash);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("hashchange", onHash);
+    };
+  }, [pathname]);
+
+  const navLinks: Array<{
+    href: string;
+    label: string;
+    key: "home" | "categories" | "search" | "about";
+    hash?: boolean;
+  }> = [
+    { href: "/", label: t("nav.home"), key: "home" },
+    { href: "/buscar", label: t("nav.search"), key: "search" },
+    { href: "/#categorias", label: t("nav.categories"), key: "categories", hash: true },
+    { href: "/sobre", label: t("nav.about"), key: "about" },
+  ];
 
   const goCategories = useCallback(
     (e: React.MouseEvent) => {
       if (pathname === "/") {
         e.preventDefault();
         document.getElementById("categorias")?.scrollIntoView({ behavior: "smooth" });
+        // Update the hash without triggering a reload, so the underline
+        // sticks on "Categories" until the user scrolls away or clicks
+        // another item.
+        if (window.location.hash !== "#categorias") {
+          window.history.replaceState(null, "", "/#categorias");
+        }
+        setActiveSection("categories");
         setOpen(false);
         return;
       }
@@ -111,23 +173,35 @@ export function Navbar({ founderSlots }: { founderSlots?: number }) {
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </button>
-              {navLinks.map((l) => (
-                <li key={l.href}>
-                  {"hash" in l && l.hash ? (
-                    <Link
-                      href={l.href}
-                      className={isActive(l.href) ? "active" : ""}
-                      onClick={goCategories}
-                    >
-                      {l.label}
-                    </Link>
-                  ) : (
-                    <Link href={l.href} className={isActive(l.href) ? "active" : ""}>
-                      {l.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
+              {navLinks.map((l) => {
+                const cls = activeSection === l.key ? "active" : "";
+                const onHomeClick = (e: React.MouseEvent) => {
+                  // Clicking "Home" while already on /: clear the hash so
+                  // the underline switches away from "Categories".
+                  if (l.key === "home" && pathname === "/") {
+                    if (window.location.hash) {
+                      e.preventDefault();
+                      window.history.replaceState(null, "", "/");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                      setActiveSection("home");
+                      setOpen(false);
+                    }
+                  }
+                };
+                return (
+                  <li key={l.href}>
+                    {l.hash ? (
+                      <Link href={l.href} className={cls} onClick={goCategories}>
+                        {l.label}
+                      </Link>
+                    ) : (
+                      <Link href={l.href} className={cls} onClick={onHomeClick}>
+                        {l.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
               <li className="mobile-cta">
                 {isLight ? (
                   <>

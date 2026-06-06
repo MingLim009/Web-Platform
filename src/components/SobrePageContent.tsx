@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "./I18nProvider";
+import { MissionIcon } from "./MissionIcon";
 import { SITE, waLink } from "@/lib/utils";
 
 type Stats = {
@@ -33,17 +34,23 @@ export function SobrePageContent({ stats }: { stats: Stats }) {
         <div className="container">
           <div className="mission-grid">
             <div className="mission-card" data-reveal>
-              <div className="mission-icon">🎯</div>
+              <div className="mission-icon mission-icon-svg">
+                <MissionIcon kind="mission" size={84} />
+              </div>
               <h3>{t("sobre.mission")}</h3>
               <p>{t("sobre.missionText")}</p>
             </div>
             <div className="mission-card">
-              <div className="mission-icon">💡</div>
+              <div className="mission-icon mission-icon-svg">
+                <MissionIcon kind="vision" size={84} />
+              </div>
               <h3>{t("sobre.vision")}</h3>
               <p>{t("sobre.visionText")}</p>
             </div>
             <div className="mission-card">
-              <div className="mission-icon">🤝</div>
+              <div className="mission-icon mission-icon-svg">
+                <MissionIcon kind="values" size={84} />
+              </div>
               <h3>{t("sobre.values")}</h3>
               <p>{t("sobre.valuesText")}</p>
             </div>

@@ -1,0 +1,65 @@
+feat(visuals): championship-cup trophies, brighter star, gradient text, glow logo, SVG mission icons, navbar fix
+
+Replaces every item the client circled/arrowed in their screenshot review.
+
+WeeklyTop ranking (image 1 — circled medals):
+- New TrophyIcon SVG component with three variants (gold/silver/bronze).
+- Each trophy has handles, laurel-wreath crown, ornate body with a star
+  medallion, wooden base and an engraved brass plate (1/2/3 LUGAR),
+  modeled on the reference image the client sent. Pure SVG — gradients,
+  filters and a glow halo, no images.
+- Replaces the flat emoji medals (also kills the MEDALS const).
+- Gold trophy floats subtly, all trophies lift + tilt on hover. Rank
+  labels now use gold/silver/bronze gradient text.
+
+HeroMosaic (image 2 — arrows on caregiver / personal trainer / physio):
+- Caregiver 7551589 (cooking scene) -> 7551668 (caregiver giving medicine
+  to elderly man, sunlit living room) — actually shows caregiving.
+- Personal Trainer 4498294 (anonymous dumbbells studio) -> 6111621 (woman
+  trainer supervising clients gym session) — real training scene with a
+  fully clothed instructor.
+- Physio 20860594 (instructing) -> 20860609 (massaging lifted leg) —
+  unambiguous clinical rehab scene. All 6 URLs HEAD-verified 200 OK.
+
+Founder star (image 4 — arrow on Founder 2026):
+- ShineStar rewritten with brighter radial gradient (white-hot core),
+  twin ray bands (long thin + short thick offset half-step), a pulsing
+  golden aura halo and a stronger triple-blur glow filter. Body now
+  also pulses + breathes. Reduced-motion respected. The FUNDADOR / 2026
+  labels are gold-gradient with drop-shadow glow.
+
+Logo (image 3 — arrow on AchouPro logo):
+- public/logo.svg: richer 3-stop pin gradients (orange dome + deep blue),
+  added glass highlight on the dome, neon-green check with outer halo
+  ring + white core, decorative sparkles, soft floor shadow.
+- .brand-mark CSS: dual drop-shadow (orange + blue) + lift/rotate on
+  hover. Brand name Achou + Pro now use clipping linear gradients
+  with a hover shine-sweep animation.
+
+Mission / Vision / Values (image 5 — arrows on target/bulb/handshake):
+- New MissionIcon SVG component with three kinds (mission/vision/values).
+- mission: gradient dartboard with arrow piercing the bullseye
+- vision:  gradient lightbulb with radiating rays + threaded base
+- values:  two hands clasping over a soft heart silhouette
+- Each icon has its own multi-stop gradient, soft glow filter and a
+  dashed concentric ring backdrop. Replaces the flat emoji icons.
+
+Navbar (sticky/jumping active state bug):
+- Old isActive returned true for BOTH Home and Categories on /, so the
+  underline appeared on two links simultaneously and shifted on click.
+  New activeSection state tracks one of home/categories/search/about
+  using pathname + window.location.hash + a scroll-spy on the
+  #categorias section. Clicking Home now clears the hash, clicking
+  Categories sets it, and scroll position keeps the underline anchored
+  to the section actually in view.
+
+Bright text polish:
+- Section H2s get a tri-color blue->blue->orange gradient text fill plus
+  an underline gradient bar (orange/blue/green) with glow.
+- Eyebrow tags get gradient orange text with extra letter-spacing.
+- Hero H1, mission-card H3, stat-big numbers, and Founder labels all
+  receive coordinated gradient + drop-shadow treatments. Dark mode
+  swaps in light-blue/gold gradients for contrast.
+
+All icons are now pure SVG. Reduced-motion media query disables
+animations site-wide for accessibility.

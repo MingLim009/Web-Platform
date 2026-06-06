@@ -21,19 +21,28 @@ const TILES: { key: string; src: string; fallback: string; categoria: string }[]
   },
   {
     key: "mosaicCaregiver",
-    src: "https://images.pexels.com/photos/7551589/pexels-photo-7551589.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/3768131/pexels-photo-3768131.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    // Caregiver in yellow sweater preparing medicine for an elderly man —
+    // clearly a caregiving scene (replaces the cooking shot the client
+    // flagged as not matching "elderly caregiver").
+    src: "https://images.pexels.com/photos/7551668/pexels-photo-7551668.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/29372696/pexels-photo-29372696.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "cuidador",
   },
   {
     key: "mosaicPersonal",
-    src: "https://images.pexels.com/photos/4498294/pexels-photo-4498294.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
-    fallback: "https://images.pexels.com/photos/4498603/pexels-photo-4498603.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    // Woman trainer supervising client's exercise in a gym (replaces the
+    // anonymous purple-dumbbells studio shot — client wanted a real
+    // training scene with a fully clothed instructor).
+    src: "https://images.pexels.com/photos/6111621/pexels-photo-6111621.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    fallback: "https://images.pexels.com/photos/6740056/pexels-photo-6740056.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "personal-trainer",
   },
   {
     key: "mosaicPhysio",
-    src: "https://images.pexels.com/photos/20860594/pexels-photo-20860594.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
+    // Physiotherapist working on a patient's lifted leg — a clear clinical
+    // rehab scene (replaces the previous "instructing patient" image the
+    // client felt was less obvious).
+    src: "https://images.pexels.com/photos/20860609/pexels-photo-20860609.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     fallback: "https://images.pexels.com/photos/4506166/pexels-photo-4506166.jpeg?auto=compress&cs=tinysrgb&w=400&h=500&fit=crop",
     categoria: "cuidador",
   },

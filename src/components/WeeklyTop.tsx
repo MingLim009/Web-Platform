@@ -3,11 +3,10 @@
 import Link from "next/link";
 import type { Professional, Category, City } from "@prisma/client";
 import { GlowStar } from "./GlowStar";
+import { TrophyIcon } from "./TrophyIcon";
 import { useI18n } from "./I18nProvider";
 
 type ProWithRel = Professional & { category: Category; city: City };
-
-const MEDALS = ["🥇", "🥈", "🥉"];
 
 export function WeeklyTop({ pros }: { pros: ProWithRel[] }) {
   const { t, cat } = useI18n();
@@ -25,12 +24,13 @@ export function WeeklyTop({ pros }: { pros: ProWithRel[] }) {
 
         <ol className="podium">
           {pros.slice(0, 3).map((pro, idx) => {
+            const rank = (idx + 1) as 1 | 2 | 3;
             const medalText =
               idx === 0 ? t("weekly.medal1") : idx === 1 ? t("weekly.medal2") : t("weekly.medal3");
             return (
               <li key={pro.id} className={`podium-card podium-${idx + 1}`}>
                 <div className="podium-rank" aria-hidden>
-                  <span className="podium-medal">{MEDALS[idx]}</span>
+                  <TrophyIcon rank={rank} size={rank === 1 ? 76 : 64} className="podium-trophy" />
                   <span className="podium-rank-label">{medalText}</span>
                 </div>
                 <Link href={`/profissional/${pro.slug}`} className="podium-link">

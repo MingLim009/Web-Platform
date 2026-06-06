@@ -224,18 +224,53 @@ html[data-color-mode="light"] .color-mode-thumb {
   animation: shineRayPulse 2.2s ease-in-out infinite;
 }
 
+.shine-star-ray-short {
+  animation: shineRayShortPulse 1.7s ease-in-out infinite;
+}
+
 .shine-star-body {
   animation: shineStarGlow 2.5s ease-in-out infinite;
+  transform-origin: 60px 60px;
+}
+
+.shine-star-aura {
+  transform-origin: 60px 60px;
+  animation: shineAuraPulse 3.4s ease-in-out infinite;
 }
 
 @keyframes shineRayPulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.55; transform: scale(0.96); }
+  50%      { opacity: 1;    transform: scale(1.05); }
+}
+
+@keyframes shineRayShortPulse {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 0.95; }
 }
 
 @keyframes shineStarGlow {
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5)); }
-  50% { filter: drop-shadow(0 0 22px rgba(255, 200, 50, 0.95)); }
+  0%, 100% {
+    filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.65))
+            drop-shadow(0 0 24px rgba(245, 158, 11, 0.35));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 26px rgba(255, 220, 90, 1))
+            drop-shadow(0 0 48px rgba(255, 196, 60, 0.7));
+    transform: scale(1.04);
+  }
+}
+
+@keyframes shineAuraPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-star-ray,
+  .shine-star-ray-short,
+  .shine-star-body,
+  .shine-star-aura { animation: none; }
 }
 
 html[data-color-mode="light"] .shine-star-ray {
@@ -1406,12 +1441,60 @@ html[data-color-mode="light"] .search-error { color: var(--c-red); }
 
 .podium-medal { font-size: 2rem; line-height: 1; }
 
+/* New championship-cup SVG (replaces flat 🥇🥈🥉 emoji medals).
+   Subtle hover lift + drop-shadow-glow + slow float animation on the
+   gold rank to add life without being distracting. */
+.podium-trophy {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+  transition: transform 0.35s cubic-bezier(.2, .9, .3, 1.2), filter 0.35s ease;
+}
+.podium-card:hover .podium-trophy {
+  transform: translateY(-3px) scale(1.04) rotate(-1deg);
+}
+.podium-1 .podium-trophy {
+  filter: drop-shadow(0 10px 22px rgba(255, 196, 60, 0.55));
+  animation: trophy-float 4s ease-in-out infinite;
+}
+.podium-2 .podium-trophy {
+  filter: drop-shadow(0 8px 16px rgba(190, 200, 215, 0.45));
+}
+.podium-3 .podium-trophy {
+  filter: drop-shadow(0 8px 16px rgba(205, 122, 58, 0.45));
+}
+@keyframes trophy-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .podium-1 .podium-trophy { animation: none; }
+  .podium-card:hover .podium-trophy { transform: none; }
+}
+
 .podium-rank-label {
   font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--c-gray-500);
+  color: var(--c-gray-700);
+  margin-top: 0.35rem;
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.podium-2 .podium-rank-label {
+  background: linear-gradient(135deg, #94a3b8, #475569);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.podium-3 .podium-rank-label {
+  background: linear-gradient(135deg, #d97706, #92400e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .podium-link { display: block; text-decoration: none; color: inherit; }
@@ -1956,4 +2039,133 @@ html[data-color-mode="dark"] .nav-links .mobile-cta,
   background: linear-gradient(135deg, rgba(0, 119, 255, 0.18), rgba(255, 106, 0, 0.18));
   min-height: 100%;
   object-fit: cover;
+}
+
+/* =========================================================
+   Bright / stylish text polish
+   - Gradient text on section H2s and on the eyebrow tag
+   - Glowing accent under section headings
+   - Stronger contrast in dark mode so the headings "sing"
+   ========================================================= */
+
+.section-header .eyebrow {
+  position: relative;
+  background: linear-gradient(135deg, #FF8A2C 0%, #FF6A00 50%, #E65800 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  filter: drop-shadow(0 0 8px rgba(255, 138, 44, 0.15));
+}
+
+.section-header h2 {
+  background: linear-gradient(135deg, #0E2A6B 0%, #0F77E5 50%, #FF8A2C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  position: relative;
+  display: inline-block;
+}
+.section-header h2::after {
+  content: "";
+  display: block;
+  margin: 0.5rem auto 0;
+  width: 64px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #FF8A2C, #0F77E5, #34D399);
+  box-shadow: 0 0 14px rgba(255, 138, 44, 0.5);
+}
+
+html[data-color-mode="dark"] .section-header h2 {
+  background: linear-gradient(135deg, #BAD7FF 0%, #6EB6FF 35%, #FFD24A 70%, #FFB266 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 196, 60, 0.20));
+}
+
+html[data-color-mode="dark"] .section-header .eyebrow {
+  background: linear-gradient(135deg, #FFD24A 0%, #FF8A2C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html[data-color-mode="dark"] .section-header p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Hero H1 — keep readable but add subtle shine */
+.hero-text h1 {
+  background: linear-gradient(135deg, #0E2A6B 0%, #0F77E5 45%, #FF8A2C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.06));
+}
+html[data-color-mode="dark"] .hero-text h1 {
+  background: linear-gradient(135deg, #ffffff 0%, #BAD7FF 45%, #FFD24A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(255, 220, 90, 0.18));
+}
+
+/* Mission/Vision/Values heading polish */
+.mission-card h3 {
+  background: linear-gradient(135deg, #0E2A6B, #0F77E5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+html[data-color-mode="dark"] .mission-card h3 {
+  background: linear-gradient(135deg, #ffffff, #BAD7FF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Founder seal labels — brighter, more drama */
+.shine-star-labels strong {
+  background: linear-gradient(135deg, #fff7cc 0%, #ffd24a 50%, #c58400 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  filter: drop-shadow(0 0 10px rgba(255, 196, 60, 0.45));
+}
+
+/* Stats numbers on /sobre */
+.stat-big .stat-num {
+  background: linear-gradient(135deg, #0F77E5 0%, #FF8A2C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 12px rgba(15, 119, 229, 0.25));
+}
+html[data-color-mode="dark"] .stat-big .stat-num {
+  background: linear-gradient(135deg, #BAD7FF 0%, #FFD24A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Brand text — subtle "shine sweep" on hover */
+.brand:hover .brand-name {
+  animation: brandShine 0.7s ease-out;
+}
+@keyframes brandShine {
+  0%   { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+  50%  { filter: brightness(1.35) drop-shadow(0 0 18px rgba(255, 220, 90, 0.5)); }
+  100% { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand:hover .brand-name { animation: none; }
 }
