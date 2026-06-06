@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useI18n } from "./I18nProvider";
 import { MissionIcon } from "./MissionIcon";
+import { AnimatedStat } from "./AnimatedStat";
 import { SITE, waLink } from "@/lib/utils";
 
 type Stats = {
@@ -35,21 +36,21 @@ export function SobrePageContent({ stats }: { stats: Stats }) {
           <div className="mission-grid">
             <div className="mission-card" data-reveal>
               <div className="mission-icon mission-icon-svg">
-                <MissionIcon kind="mission" size={84} />
+                <MissionIcon kind="mission" size={120} />
               </div>
               <h3>{t("sobre.mission")}</h3>
               <p>{t("sobre.missionText")}</p>
             </div>
             <div className="mission-card">
               <div className="mission-icon mission-icon-svg">
-                <MissionIcon kind="vision" size={84} />
+                <MissionIcon kind="vision" size={120} />
               </div>
               <h3>{t("sobre.vision")}</h3>
               <p>{t("sobre.visionText")}</p>
             </div>
             <div className="mission-card">
               <div className="mission-icon mission-icon-svg">
-                <MissionIcon kind="values" size={84} />
+                <MissionIcon kind="values" size={120} />
               </div>
               <h3>{t("sobre.values")}</h3>
               <p>{t("sobre.valuesText")}</p>
@@ -66,19 +67,27 @@ export function SobrePageContent({ stats }: { stats: Stats }) {
           </div>
           <div className="stats-strip">
             <div className="stat-big">
-              <div className="stat-num">{stats.totalPros}</div>
+              <div className="stat-num">
+                <AnimatedStat value={stats.totalPros} />
+              </div>
               <div className="stat-lbl">{t("sobre.statPros")}</div>
             </div>
             <div className="stat-big">
-              <div className="stat-num">{stats.totalReviews}+</div>
+              <div className="stat-num">
+                <AnimatedStat value={stats.totalReviews} suffix="+" />
+              </div>
               <div className="stat-lbl">{t("sobre.statReviews")}</div>
             </div>
             <div className="stat-big">
-              <div className="stat-num">{stats.avgRating.toFixed(1)}★</div>
+              <div className="stat-num">
+                <AnimatedStat value={stats.avgRating} decimals={1} suffix="★" />
+              </div>
               <div className="stat-lbl">{t("sobre.statAvg")}</div>
             </div>
             <div className="stat-big">
-              <div className="stat-num">{stats.foundersRemaining}</div>
+              <div className="stat-num">
+                <AnimatedStat value={stats.foundersRemaining} />
+              </div>
               <div className="stat-lbl">{t("sobre.statFounder")}</div>
             </div>
           </div>

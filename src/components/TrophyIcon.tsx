@@ -30,31 +30,36 @@ const PALETTES: Record<
     shadow: string;
     rim: string;
     glow: string;
+    glowOuter: string;
   }
 > = {
+  // Gold — boosted brightness + hot white core
   1: {
-    light: "#FFF7CC",
+    light: "#FFFCE0",
     mid: "#FFD24A",
     deep: "#C58400",
     shadow: "#8A5A00",
-    rim: "#FFE890",
-    glow: "rgba(255, 196, 60, 0.65)",
+    rim: "#FFF6B8",
+    glow: "rgba(255, 213, 75, 0.95)",
+    glowOuter: "rgba(255, 173, 30, 0.55)",
   },
   2: {
-    light: "#F6F8FB",
-    mid: "#C9D1DC",
+    light: "#FBFCFE",
+    mid: "#D1D9E3",
     deep: "#7C8595",
     shadow: "#4F5763",
-    rim: "#E6EAF2",
-    glow: "rgba(190, 200, 215, 0.55)",
+    rim: "#EEF1F7",
+    glow: "rgba(220, 230, 245, 0.85)",
+    glowOuter: "rgba(170, 185, 205, 0.45)",
   },
   3: {
-    light: "#F1C29A",
-    mid: "#C2733A",
+    light: "#F8D2B0",
+    mid: "#D08245",
     deep: "#8A4A1F",
     shadow: "#5A2F12",
-    rim: "#E5A876",
-    glow: "rgba(205, 122, 58, 0.55)",
+    rim: "#EFB888",
+    glow: "rgba(235, 152, 78, 0.85)",
+    glowOuter: "rgba(190, 100, 40, 0.45)",
   },
 };
 
@@ -77,20 +82,22 @@ export function TrophyIcon({
       role={ariaLabel ? "img" : "presentation"}
       aria-label={ariaLabel}
       aria-hidden={!ariaLabel}
+      style={{ overflow: "visible" }}
     >
       <defs>
-        {/* Cup body — vertical metallic gradient */}
+        {/* Cup body — vertical metallic gradient with brighter top */}
         <linearGradient id={`${uid}-cup`} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={palette.light} />
-          <stop offset="35%" stopColor={palette.mid} />
-          <stop offset="70%" stopColor={palette.deep} />
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="15%" stopColor={palette.light} />
+          <stop offset="45%" stopColor={palette.mid} />
+          <stop offset="75%" stopColor={palette.deep} />
           <stop offset="100%" stopColor={palette.shadow} />
         </linearGradient>
 
         {/* Specular highlight running down the left side of the cup */}
         <linearGradient id={`${uid}-spec`} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.85)" />
-          <stop offset="30%" stopColor="rgba(255,255,255,0.25)" />
+          <stop offset="0%" stopColor="rgba(255,255,255,0.95)" />
+          <stop offset="30%" stopColor="rgba(255,255,255,0.35)" />
           <stop offset="60%" stopColor="rgba(255,255,255,0)" />
         </linearGradient>
 
@@ -107,23 +114,73 @@ export function TrophyIcon({
           <stop offset="100%" stopColor="#B98A1F" />
         </linearGradient>
 
-        {/* Soft golden glow behind the cup */}
-        <radialGradient id={`${uid}-aura`} cx="50%" cy="40%" r="55%">
+        {/* Two-stop radial aura: hot core + soft outer halo */}
+        <radialGradient id={`${uid}-aura`} cx="50%" cy="40%" r="65%">
           <stop offset="0%" stopColor={palette.glow} />
+          <stop offset="55%" stopColor={palette.glowOuter} />
           <stop offset="100%" stopColor="rgba(0,0,0,0)" />
         </radialGradient>
 
-        <filter id={`${uid}-shine`} x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="0.6" result="b" />
+        {/* Strong drop-shadow / glow filter for the cup */}
+        <filter id={`${uid}-shine`} x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="0.6" result="b1" />
+          <feGaussianBlur stdDeviation="2" result="b2" />
           <feMerge>
-            <feMergeNode in="b" />
+            <feMergeNode in="b2" />
+            <feMergeNode in="b1" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        {/* Extra-strong outer glow filter for the gold rank only */}
+        <filter id={`${uid}-superglow`} x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="2.5" result="g1" />
+          <feGaussianBlur stdDeviation="6"   result="g2" />
+          <feGaussianBlur stdDeviation="10"  result="g3" />
+          <feMerge>
+            <feMergeNode in="g3" />
+            <feMergeNode in="g2" />
+            <feMergeNode in="g1" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
       </defs>
 
-      {/* Soft aura glow */}
-      <ellipse cx="50" cy="48" rx="46" ry="44" fill={`url(#${uid}-aura)`} />
+      {/* Soft aura glow — bigger ellipse so it spills past the SVG bounds */}
+      <ellipse
+        className="trophy-aura"
+        cx="50"
+        cy="48"
+        rx="58"
+        ry="56"
+        fill={`url(#${uid}-aura)`}
+      />
+
+      {/* Rays of light radiating out from behind the cup — gold rank only */}
+      {rank === 1 && (
+        <g className="trophy-rays" opacity="0.85">
+          {Array.from({ length: 14 }).map((_, i) => {
+            const a = (i * (360 / 14) * Math.PI) / 180 - Math.PI / 2;
+            const cx = 50;
+            const cy = 48;
+            const r1 = 36;
+            const r2 = 60;
+            return (
+              <line
+                key={i}
+                x1={cx + Math.cos(a) * r1}
+                y1={cy + Math.sin(a) * r1}
+                x2={cx + Math.cos(a) * r2}
+                y2={cy + Math.sin(a) * r2}
+                stroke={`url(#${uid}-cup)`}
+                strokeWidth={1.4}
+                strokeLinecap="round"
+                opacity={0.55}
+              />
+            );
+          })}
+        </g>
+      )}
 
       {/* Laurel-wreath crown on top of the lid */}
       <g
@@ -138,7 +195,9 @@ export function TrophyIcon({
         {/* Right half of wreath */}
         <path d="M50 6 C59 6, 66 10, 70 16 C68 18, 64 18, 61 16 C63 13, 59 10, 55 9 C53 11, 51 12, 50 12 Z" />
         {/* Central crown tip */}
-        <circle cx="50" cy="6.5" r="2.2" />
+        <circle cx="50" cy="6.5" r="2.4" />
+        {/* Crown sparkle */}
+        <circle cx="50" cy="6.5" r="0.9" fill="#ffffff" />
       </g>
 
       {/* Cup handles — left */}
@@ -156,7 +215,7 @@ export function TrophyIcon({
         strokeWidth="0.6"
       />
 
-      {/* Cup body — ornate vase shape */}
+      {/* Cup body — ornate vase shape (gold gets the super-glow filter) */}
       <path
         d="M28 32
            C28 28, 30 26, 34 26
@@ -172,7 +231,7 @@ export function TrophyIcon({
         fill={`url(#${uid}-cup)`}
         stroke={palette.deep}
         strokeWidth="0.9"
-        filter={`url(#${uid}-shine)`}
+        filter={rank === 1 ? `url(#${uid}-superglow)` : `url(#${uid}-shine)`}
       />
 
       {/* Decorative ring around the rim of the cup */}

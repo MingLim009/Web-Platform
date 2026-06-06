@@ -230,11 +230,25 @@ export function Navbar({ founderSlots }: { founderSlots?: number }) {
           </nav>
 
           <div className="nav-cta">
-            {typeof founderSlots === "number" && founderSlots > 0 && (
-              <span className="nav-founder-pill" aria-hidden>
-                {t("nav.founderSlots", { n: founderSlots })}
-              </span>
-            )}
+            {/* The founder-slots pill is rendered on every page so the
+                right side of the navbar has a stable width regardless of
+                whether the current route fetched founder data. When the
+                count isn't available we keep the layout space but hide
+                the pill visually. This is the fix for the bug where the
+                whole nav-cta (and therefore the menu items) shifted
+                horizontally between routes. */}
+            <span
+              className={
+                typeof founderSlots === "number" && founderSlots > 0
+                  ? "nav-founder-pill"
+                  : "nav-founder-pill nav-founder-pill-placeholder"
+              }
+              aria-hidden
+            >
+              {typeof founderSlots === "number" && founderSlots > 0
+                ? t("nav.founderSlots", { n: founderSlots })
+                : t("nav.founderSlots", { n: 200 })}
+            </span>
             {isLight ? (
               <>
                 <a

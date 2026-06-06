@@ -30,7 +30,7 @@ export function WeeklyTop({ pros }: { pros: ProWithRel[] }) {
             return (
               <li key={pro.id} className={`podium-card podium-${idx + 1}`}>
                 <div className="podium-rank" aria-hidden>
-                  <TrophyIcon rank={rank} size={rank === 1 ? 76 : 64} className="podium-trophy" />
+                  <TrophyIcon rank={rank} size={rank === 1 ? 108 : 78} className="podium-trophy" />
                   <span className="podium-rank-label">{medalText}</span>
                 </div>
                 <Link href={`/profissional/${pro.slug}`} className="podium-link">

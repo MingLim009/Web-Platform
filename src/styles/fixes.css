@@ -14,7 +14,35 @@
 
 @media (min-width: 769px) {
   .nav-founder-pill { display: inline-flex; align-items: center; }
+  /* Placeholder takes the same space but is invisible — keeps the
+     nav-cta width identical between pages that have founder data and
+     pages that don't, so the menu items above never shift left/right. */
+  .nav-founder-pill-placeholder {
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
+
+/* =========================================================
+   Navbar layout stability across pages
+   - Reserve a fixed min-width for the nav-cta on desktop so swapping
+     between "Talk + Register" (light mode) and "Login + Register"
+     (dark mode) doesn't visibly shift the layout.
+   - Lock a steady min-height on the navbar-inner so route changes
+     never make the bar grow/shrink vertically (which the user
+     reported as "mouse cursor moves when turning pages").
+   ========================================================= */
+.navbar-inner { min-height: 64px; }
+
+@media (min-width: 1024px) {
+  .nav-cta { min-width: 340px; justify-content: flex-end; }
+}
+@media (min-width: 1280px) {
+  .nav-cta { min-width: 380px; }
+}
+
+/* Stabilize the buttons so their widths don't vary by language */
+.nav-cta .btn-sm { min-width: 110px; justify-content: center; }
 
 .cat-card .cat-icon {
   display: flex;
@@ -1454,23 +1482,55 @@ html[data-color-mode="light"] .search-error { color: var(--c-red); }
   transform: translateY(-3px) scale(1.04) rotate(-1deg);
 }
 .podium-1 .podium-trophy {
-  filter: drop-shadow(0 10px 22px rgba(255, 196, 60, 0.55));
+  filter: drop-shadow(0 14px 30px rgba(255, 196, 60, 0.75))
+          drop-shadow(0 0 24px rgba(255, 220, 90, 0.55));
   animation: trophy-float 4s ease-in-out infinite;
 }
 .podium-2 .podium-trophy {
-  filter: drop-shadow(0 8px 16px rgba(190, 200, 215, 0.45));
+  filter: drop-shadow(0 10px 20px rgba(190, 200, 215, 0.55));
 }
 .podium-3 .podium-trophy {
-  filter: drop-shadow(0 8px 16px rgba(205, 122, 58, 0.45));
+  filter: drop-shadow(0 10px 20px rgba(205, 122, 58, 0.55));
 }
 @keyframes trophy-float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-5px); }
 }
+
+/* Trophy aura — pulses brightness for the gold rank to add life.
+   Other ranks get a much subtler / static aura. */
+.trophy-aura {
+  transform-origin: 50px 48px;
+}
+.podium-1 .trophy-aura {
+  animation: trophy-aura-pulse 2.6s ease-in-out infinite;
+}
+@keyframes trophy-aura-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(0.95); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+/* Long thin rays radiating out behind the gold cup. */
+.trophy-rays {
+  transform-origin: 50px 48px;
+  animation: trophy-rays-rotate 22s linear infinite;
+}
+@keyframes trophy-rays-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .podium-1 .podium-trophy { animation: none; }
+  .podium-1 .podium-trophy,
+  .podium-1 .trophy-aura,
+  .trophy-rays { animation: none; }
   .podium-card:hover .podium-trophy { transform: none; }
 }
+
+/* Bring the 1st-place trophy forward so its larger size + glow don't
+   feel cramped. Allow it to spill past the card padding visually. */
+.podium-1 .podium-rank { margin-top: -1.25rem; }
+.podium-1 .podium-trophy { overflow: visible; }
 
 .podium-rank-label {
   font-size: 0.6875rem;
@@ -2141,19 +2201,59 @@ html[data-color-mode="dark"] .mission-card h3 {
   filter: drop-shadow(0 0 10px rgba(255, 196, 60, 0.45));
 }
 
-/* Stats numbers on /sobre */
+/* Stats numbers on /sobre — animated count-up + shimmering gradient text.
+   The number sits in a span.animated-stat which is filled with a moving
+   linear gradient (background-position is animated) so the value
+   physically shimmers as it counts up and continues to glow after. */
 .stat-big .stat-num {
-  background: linear-gradient(135deg, #0F77E5 0%, #FF8A2C 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 12px rgba(15, 119, 229, 0.25));
+  font-size: 2.75rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
-html[data-color-mode="dark"] .stat-big .stat-num {
-  background: linear-gradient(135deg, #BAD7FF 0%, #FFD24A 100%);
+.stat-big .animated-stat {
+  display: inline-block;
+  background: linear-gradient(110deg,
+    #0F77E5 0%,
+    #FF8A2C 25%,
+    #FFD24A 50%,
+    #FF8A2C 75%,
+    #0F77E5 100%);
+  background-size: 300% 100%;
+  background-position: 0% 50%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 138, 44, 0.35));
+  animation: statShimmer 5s ease-in-out infinite;
+}
+.stat-big .animated-stat.is-counting {
+  animation-duration: 1.4s;
+}
+.stat-big .animated-stat.is-done {
+  animation-duration: 5s;
+}
+@keyframes statShimmer {
+  0%   { background-position: 0% 50%;   filter: drop-shadow(0 0 14px rgba(255, 138, 44, 0.35)); }
+  50%  { background-position: 100% 50%; filter: drop-shadow(0 0 22px rgba(255, 220, 90, 0.55)); }
+  100% { background-position: 0% 50%;   filter: drop-shadow(0 0 14px rgba(255, 138, 44, 0.35)); }
+}
+html[data-color-mode="dark"] .stat-big .animated-stat {
+  background: linear-gradient(110deg,
+    #BAD7FF 0%,
+    #6EB6FF 25%,
+    #FFD24A 50%,
+    #FF8A2C 75%,
+    #BAD7FF 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 16px rgba(255, 220, 90, 0.4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-big .animated-stat { animation: none; background-position: 50% 50%; }
 }
 
 /* Brand text — subtle "shine sweep" on hover */
@@ -2168,4 +2268,150 @@ html[data-color-mode="dark"] .stat-big .stat-num {
 
 @media (prefers-reduced-motion: reduce) {
   .brand:hover .brand-name { animation: none; }
+}
+
+/* =========================================================
+   Glowing gradient borders on cards (dark theme primary)
+   - Single technique: a pseudo-element layered behind the card
+     with a conic/linear gradient that becomes brighter on hover.
+   - Applied to mission-card, podium-card, stat-big, cat-card,
+     howto-step and the founder-banner ribbon.
+   ========================================================= */
+
+.mission-card,
+.podium-card,
+.stat-big,
+.cat-card,
+.howto-step {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Static "halo" gradient border */
+.mission-card::before,
+.podium-card::before,
+.stat-big::before,
+.cat-card::before,
+.howto-step::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+    rgba(255, 138, 44, 0.55),
+    rgba(15, 119, 229, 0.55),
+    rgba(52, 211, 153, 0.45));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.65;
+  transition: opacity 0.35s ease, filter 0.35s ease;
+  z-index: 1;
+}
+
+.mission-card:hover::before,
+.podium-card:hover::before,
+.stat-big:hover::before,
+.cat-card:hover::before,
+.howto-step:hover::before {
+  opacity: 1;
+  filter: brightness(1.4) drop-shadow(0 0 14px rgba(255, 138, 44, 0.4));
+}
+
+/* Animated rotating shimmer that runs around the border on hover.
+   Implemented as a second ::after pseudo-element with a tightly-clipped
+   conic-gradient mask, rotated continuously. */
+.mission-card,
+.podium-card,
+.stat-big,
+.cat-card,
+.howto-step { --shimmer-deg: 0deg; }
+
+.mission-card::after,
+.podium-card::after,
+.stat-big::after,
+.cat-card::after,
+.howto-step::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--shimmer-deg),
+    rgba(255, 220, 90, 0) 0deg,
+    rgba(255, 220, 90, 0.85) 20deg,
+    rgba(255, 138, 44, 0.55) 50deg,
+    rgba(255, 220, 90, 0) 90deg,
+    rgba(255, 220, 90, 0) 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  animation: cardShimmer 4s linear infinite;
+  z-index: 1;
+}
+
+@property --shimmer-deg {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.mission-card:hover::after,
+.podium-card:hover::after,
+.stat-big:hover::after,
+.cat-card:hover::after,
+.howto-step:hover::after {
+  opacity: 1;
+}
+
+@keyframes cardShimmer {
+  to { --shimmer-deg: 360deg; }
+}
+
+/* Ensure card content stays above the gradient pseudo-elements */
+.mission-card > *,
+.podium-card > *,
+.stat-big > *,
+.cat-card > *,
+.howto-step > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Founder banner ribbon — turn the plain pill into a glowing gradient
+   pill with a soft pulse so it feels alive. The client circled this on
+   image 2. */
+.founder-banner .ribbon {
+  background: linear-gradient(135deg, #FFE48A 0%, #FFD24A 50%, #C58400 100%) !important;
+  color: #1F1207 !important;
+  box-shadow:
+    0 0 0 1px rgba(255, 232, 138, 0.65),
+    0 6px 18px rgba(255, 196, 60, 0.55),
+    0 0 28px rgba(255, 220, 90, 0.35);
+  font-weight: 800 !important;
+  letter-spacing: 0.04em;
+  animation: ribbonPulse 2.8s ease-in-out infinite;
+}
+@keyframes ribbonPulse {
+  0%, 100% { filter: brightness(1)    drop-shadow(0 0 6px rgba(255, 220, 90, 0.4)); }
+  50%      { filter: brightness(1.12) drop-shadow(0 0 18px rgba(255, 220, 90, 0.85)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission-card::after,
+  .podium-card::after,
+  .stat-big::after,
+  .cat-card::after,
+  .howto-step::after { animation: none; }
+  .founder-banner .ribbon { animation: none; }
 }

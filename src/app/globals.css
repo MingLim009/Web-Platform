@@ -270,19 +270,33 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.25rem;
 }
 
+.brand {
+  position: relative;
+}
 .brand-mark {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
-  filter: drop-shadow(0 4px 10px rgba(255, 106, 0, 0.35))
-          drop-shadow(0 2px 6px rgba(0, 119, 255, 0.25));
-  transition: transform 0.35s cubic-bezier(.2, .9, .3, 1.2), filter 0.35s ease;
+  filter: drop-shadow(0 5px 14px rgba(255, 106, 0, 0.45))
+          drop-shadow(0 3px 8px rgba(0, 119, 255, 0.35));
+  transition: transform 0.4s cubic-bezier(.2, .9, .3, 1.2), filter 0.4s ease;
+  animation: brandFloat 5s ease-in-out infinite;
+}
+
+@keyframes brandFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px); }
 }
 
 .brand:hover .brand-mark {
-  transform: translateY(-2px) rotate(-4deg) scale(1.06);
-  filter: drop-shadow(0 8px 18px rgba(255, 138, 44, 0.55))
-          drop-shadow(0 4px 12px rgba(0, 119, 255, 0.4));
+  transform: translateY(-3px) rotate(-6deg) scale(1.10);
+  filter: drop-shadow(0 10px 22px rgba(255, 138, 44, 0.7))
+          drop-shadow(0 6px 16px rgba(0, 119, 255, 0.55));
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-mark { animation: none; }
 }
 
 .brand-text {
@@ -3615,18 +3629,42 @@ table.admin-table {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 0.75rem;
-  transition: transform 0.4s cubic-bezier(.2, .9, .3, 1.2), filter 0.4s ease;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.08));
+  margin: 0 auto 1rem;
+  width: 120px;
+  height: 120px;
+  transition: transform 0.5s cubic-bezier(.2, .9, .3, 1.2), filter 0.5s ease;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.18));
 }
 .mission-card:hover .mission-icon-svg {
-  transform: translateY(-3px) scale(1.06);
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.16));
+  transform: translateY(-4px) scale(1.08) rotate(-2deg);
+  filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.28));
 }
-.mission-svg { display: block; }
+.mission-svg { display: block; overflow: visible; }
 .mission-svg-mission { color: #FF8A2C; }
 .mission-svg-vision  { color: #F59E0B; }
 .mission-svg-values  { color: #0077FF; }
+
+.mission-svg-aura {
+  transform-origin: 60px 60px;
+  animation: missionAuraPulse 3.2s ease-in-out infinite;
+}
+@keyframes missionAuraPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+.mission-svg-sparkle {
+  animation: missionSparkleTwinkle 1.8s ease-in-out infinite;
+}
+@keyframes missionSparkleTwinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.6); }
+  50%      { opacity: 1;   transform: scale(1.4); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission-svg-aura,
+  .mission-svg-sparkle { animation: none; }
+}
 .mission-card h3 {
   font-size: 1.25rem;
   font-weight: 700;
